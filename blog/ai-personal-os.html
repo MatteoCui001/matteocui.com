@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我花了一天给自己搭了一套AI工作系统 - Matteo Cui</title>
+<meta name="description" content="如果认真把AI当基础设施来用，能做到什么程度。一个实验记录。">
+<meta property="og:title" content="我花了一天给自己搭了一套AI工作系统，然后有点想通了一些事">
+<meta property="og:description" content="如果认真把AI当基础设施来用，能做到什么程度。一个实验记录。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matteocui.com/blog/ai-personal-os">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a1118;
+  --bg-surface: #0e171f;
+  --bg-card: rgba(15, 26, 34, 0.6);
+  --accent: #3d9b8f;
+  --accent-light: #5fb4a2;
+  --accent-dim: rgba(61, 155, 143, 0.1);
+  --accent-glow: rgba(61, 155, 143, 0.06);
+  --text: #d4dde4;
+  --text-secondary: #8fa3b3;
+  --text-muted: #4e6475;
+  --border: rgba(95, 130, 148, 0.1);
+  --serif: 'Crimson Pro', Georgia, serif;
+  --sans: 'Manrope', 'Noto Sans SC', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --zh: 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg-deep);
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+}
+
+a { color: var(--accent-light); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--accent); }
+::selection { background: rgba(61, 155, 143, 0.25); }
+
+.glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(61, 155, 143, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Nav -- */
+.nav {
+  padding: 1.5rem clamp(1.5rem, 5vw, 3rem);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.nav a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.nav a:hover { color: var(--accent-light); }
+
+/* -- Article -- */
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 3rem);
+}
+
+.article-header {
+  padding: 2rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 3rem;
+}
+
+.article-date {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+
+.article-title {
+  font-family: var(--zh);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.article-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.article-author {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+/* -- Content -- */
+.article-body h2 {
+  font-family: var(--zh);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2.5rem 0 1rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--accent);
+}
+
+.article-body p {
+  font-family: var(--zh);
+  font-size: 0.92rem;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+
+.article-body strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.article-body .pipeline {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.article-body .pipeline-title {
+  font-family: var(--zh);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--accent-light);
+  margin-bottom: 0.4rem;
+}
+
+.article-body .pipeline-desc {
+  font-family: var(--zh);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+/* -- Architecture Diagram -- */
+.arch-diagram {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+.arch-diagram svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* -- Signature -- */
+.article-signature {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* -- Footer -- */
+.article-footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem clamp(1.5rem, 5vw, 3rem) 3rem;
+}
+.article-footer-inner {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.article-footer p {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+.article-footer a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .article-body h2 { font-size: 1.1rem; }
+  .arch-diagram { padding: 1rem; }
+  .article-footer-inner { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<nav class="nav">
+  <a href="/">&larr; matteocui.com</a>
+</nav>
+
+<article class="article">
+  <header class="article-header">
+    <p class="article-date">2026.03.21</p>
+    <h1 class="article-title">我花了一天给自己搭了一套AI工作系统，然后有点想通了一些事</h1>
+    <p class="article-subtitle">如果认真把AI当基础设施来用，能做到什么程度。一个实验记录。</p>
+    <p class="article-author">Matteo Cui / 崔良敬</p>
+  </header>
+
+  <div class="article-body">
+    <p>周五晚上，干了一件其实拖了很久的事：整理电脑。</p>
+
+    <p>说是整理，其实有点夸张了，更像是"清理灾难现场"。我Mac桌面大概堆了四十多个G的文件，投资相关的东西散在一堆文件夹里，有些我自己都不记得当初为什么这么分。微信里收藏了一堆链接从来没再打开过，录音转写的会议纪要也都躺在邮箱里。</p>
+
+    <p>有点讽刺的是，我平时天天在看AI项目，但自己的工作方式基本还是手工的。</p>
+
+    <p>所以这次就不只是整理文件了。我其实是想试一下，如果把AI当一个底层来用，而不是零散地用一下工具，会有什么变化。</p>
+
+    <p>从周五晚上开始搭，不知不觉搞到凌晨三点。第二天去爬山，路上继续用手机调，到山顶的时候系统大概已经能跑了。</p>
+
+    <h2>具体做了什么</h2>
+
+    <p>结构没有很复杂。两台Mac，一台主要跑服务，另一台用Obsidian当知识库，iCloud同步。</p>
+
+    <!-- Architecture Diagram -->
+    <div class="arch-diagram">
+      <svg viewBox="0 0 680 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background areas -->
+        <rect x="10" y="50" width="310" height="360" rx="12" fill="#0e171f" stroke="#1e3040" stroke-width="1"/>
+        <rect x="360" y="50" width="310" height="360" rx="12" fill="#0e171f" stroke="#1e3040" stroke-width="1"/>
+
+        <!-- Labels -->
+        <text x="165" y="30" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="0.1em">M1 MacBook - Server</text>
+        <text x="515" y="30" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="0.1em">M4 MacBook - Workstation</text>
+
+        <!-- M1 Side: OpenClaw -->
+        <rect x="30" y="72" width="270" height="36" rx="6" fill="rgba(61,155,143,0.12)" stroke="#3d9b8f" stroke-width="1"/>
+        <text x="165" y="95" text-anchor="middle" fill="#5fb4a2" font-family="Manrope, sans-serif" font-size="12" font-weight="500">OpenClaw Agent Platform</text>
+
+        <!-- Agents grid -->
+        <rect x="30" y="122" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="71" y="140" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">Task</text>
+        <text x="71" y="155" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Orchestrator</text>
+
+        <rect x="124" y="122" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="165" y="140" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">Code</text>
+        <text x="165" y="155" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Agent</text>
+
+        <rect x="218" y="122" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="259" y="140" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">Memory</text>
+        <text x="259" y="155" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Manager</text>
+
+        <rect x="30" y="176" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="71" y="194" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">Research</text>
+        <text x="71" y="209" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Agent</text>
+
+        <rect x="124" y="176" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="165" y="194" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">WeChat</text>
+        <text x="165" y="209" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Processor</text>
+
+        <rect x="218" y="176" width="82" height="44" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="259" y="194" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9">Cron</text>
+        <text x="259" y="209" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Scheduler</text>
+
+        <!-- LiteLLM -->
+        <rect x="30" y="236" width="270" height="32" rx="5" fill="rgba(61,155,143,0.06)" stroke="#1e3040" stroke-width="1"/>
+        <text x="165" y="257" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="10">LiteLLM Gateway  ~11 models</text>
+
+        <!-- Automation Pipelines -->
+        <text x="30" y="292" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="0.08em">AUTOMATION PIPELINES</text>
+
+        <rect x="30" y="302" width="130" height="26" rx="4" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="95" y="319" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="8.5">obsidian-sync</text>
+
+        <rect x="170" y="302" width="130" height="26" rx="4" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="235" y="319" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="8.5">plaud-to-obsidian</text>
+
+        <rect x="30" y="336" width="130" height="26" rx="4" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="95" y="353" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="8.5">wechat-inbox</text>
+
+        <rect x="170" y="336" width="130" height="26" rx="4" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="235" y="353" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="8.5">invoice-reimburse</text>
+
+        <!-- Cron label -->
+        <rect x="30" y="372" width="270" height="24" rx="4" fill="rgba(61,155,143,0.04)"/>
+        <text x="165" y="388" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="9">12 cron jobs  (briefing, KOL, portfolio...)</text>
+
+        <!-- M4 Side: Obsidian -->
+        <rect x="380" y="72" width="270" height="36" rx="6" fill="rgba(61,155,143,0.12)" stroke="#3d9b8f" stroke-width="1"/>
+        <text x="515" y="95" text-anchor="middle" fill="#5fb4a2" font-family="Manrope, sans-serif" font-size="12" font-weight="500">Obsidian LifeOS Vault</text>
+
+        <!-- Knowledge areas -->
+        <rect x="380" y="122" width="130" height="50" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="445" y="143" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9.5">VC_OS</text>
+        <text x="445" y="160" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Research / Pipeline / IC</text>
+
+        <rect x="520" y="122" width="130" height="50" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="585" y="143" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9.5">Personal_OS</text>
+        <text x="585" y="160" text-anchor="middle" fill="#4e6475" font-family="Noto Sans SC, sans-serif" font-size="8">Journal / Health / Goals</text>
+
+        <rect x="380" y="184" width="270" height="36" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="515" y="207" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9.5">Dataview Dashboard</text>
+
+        <rect x="380" y="232" width="270" height="36" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="515" y="255" text-anchor="middle" fill="#8fa3b3" font-family="Noto Sans SC, sans-serif" font-size="9.5">Meeting Notes + Knowledge Base</text>
+
+        <!-- Cloud layer -->
+        <text x="515" y="296" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="0.08em">CLOUD SERVICES</text>
+
+        <rect x="380" y="306" width="130" height="32" rx="5" fill="rgba(61,155,143,0.08)" stroke="#3d9b8f" stroke-width="0.5" stroke-dasharray="4 3"/>
+        <text x="445" y="326" text-anchor="middle" fill="#5fb4a2" font-family="Manrope, sans-serif" font-size="9.5">HappyCapy</text>
+
+        <rect x="520" y="306" width="130" height="32" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="585" y="326" text-anchor="middle" fill="#8fa3b3" font-family="Manrope, sans-serif" font-size="9.5">Cloudflare Worker</text>
+
+        <rect x="380" y="348" width="270" height="28" rx="5" fill="#111d27" stroke="#1e3040" stroke-width="1"/>
+        <text x="515" y="367" text-anchor="middle" fill="#4e6475" font-family="IBM Plex Mono, monospace" font-size="9">iCloud Sync</text>
+
+        <!-- Connection arrows: iCloud sync between M1 and M4 -->
+        <line x1="320" y1="370" x2="360" y2="370" stroke="#3d9b8f" stroke-width="1" stroke-dasharray="4 3"/>
+        <line x1="320" y1="140" x2="360" y2="140" stroke="#3d9b8f" stroke-width="1" stroke-dasharray="4 3"/>
+
+        <!-- Sync label -->
+        <text x="340" y="250" text-anchor="middle" fill="#3d9b8f" font-family="IBM Plex Mono, monospace" font-size="8" transform="rotate(-90, 340, 250)">iCloud Sync</text>
+      </svg>
+    </div>
+
+    <p>M1那台跑OpenClaw（一个开源的agent架构，就是大家最近养的火热的龙虾），上面挂了几个agent做不同的事，任务调度、代码、记忆整理之类的，通过LiteLLM聚合了十来个模型。</p>
+
+    <p>另外我也在用HappyCapy做一些云端的工作，比如研究和文档处理。它的好处是不用配置本地环境，浏览器打开就能跑。本地和云端配合着用，各有各的适合场景。</p>
+
+    <p>真正花时间的是中间那几条"自动跑"的东西。</p>
+
+    <div class="pipeline">
+      <p class="pipeline-title">知识归档</p>
+      <p class="pipeline-desc">之前写的研究、分析，全是手动丢到不同文件夹里。现在可以自动同步到Obsidian，按项目归好。至少不会再出现"我知道我写过，但找不到"的情况。</p>
+    </div>
+
+    <div class="pipeline">
+      <p class="pipeline-title">会议纪要</p>
+      <p class="pipeline-desc">我平时用PLAUD录音，转写完的文字之前就扔在Gmail里了，基本不会再翻。现在会自动把转写内容拿出来，大致判断这是什么类型的会，生成一版结构化纪要，归到对应项目下面。会议从"存档"变成了可以被调用的材料。</p>
+    </div>
+
+    <div class="pipeline">
+      <p class="pipeline-title">微信消息分流</p>
+      <p class="pipeline-desc">这个最折腾，但也是我现在觉得最有用的一块。在Cloudflare上弄了个webhook，微信里收到的链接、文件、备忘都会被分流处理——链接抓全文进知识库，文件存本地建索引，随手记的东西进日记，该做的事进日历。</p>
+    </div>
+
+    <div class="pipeline">
+      <p class="pipeline-title">发票报销</p>
+      <p class="pipeline-desc">这条其实跑了挺久了，算是最早的一条自动化管线。系统定期扫Gmail里的发票邮件，自动下载附件，酒店发票和水单做匹配，餐饮发票直接传到报销系统。以前每个月攒一堆发票手动处理，现在基本不用管。说实话这条管线可能是所有里面投入产出比最高的——因为报销这件事不难，但特别烦，拖着不做还会越积越多。</p>
+    </div>
+
+    <p>另外也跑了一些定时任务：每天出一份AI相关信息摘要，扫邮箱发票，看看关注的KOL最近在讲什么，portfolio公司有没有公开动态。</p>
+
+    <p>文件系统也顺手重整了。桌面基本清空了，Downloads也干净了很多。按工作和个人两条线归类，Obsidian里做了一个统一入口。</p>
+
+    <h2>几个体会</h2>
+
+    <p><strong>第一个，一旦这些东西跑起来，工作方式会变。</strong></p>
+
+    <p>搭系统的同时，我也在正常做研究。有意思的是，一些原来很碎的时间，被这些自动化拼起来之后，变成了相对连续的工作流。有几份研究框架和初步分析是在这个过程中顺带出来的，不是刻意去做的，而是系统把整理、归纳这些前期工作提前做掉了，我在此基础上做判断就快很多。</p>
+
+    <p>我一开始以为变化会是"快一点"，后来发现其实不太一样——更准确地说是，我花在"找东西、整理东西、重复性操作"上的时间明显少了，这些时间被释放出来之后，自然就做了更多事。</p>
+
+    <p><strong>第二个感受：Agent的价值在系统层面，不在单点。</strong></p>
+
+    <p>6个agent没有一个是来"替代"我的。一个管任务编排，一个管代码，一个管记忆整理。单看每一个都很普通，但组合在一起，整个系统比各部分之和要强得多。</p>
+
+    <p>这跟我看项目的观察一致：最有意思的AI应用不是承诺"一键替代人"的那种，而是嵌到具体流程里、让已有系统变强的那种。</p>
+
+    <p><strong>第三个感受：大多数人说的"用AI"和真正把AI当基础设施之间，差距比想象的大。</strong></p>
+
+    <p>用ChatGPT回答问题是用AI。但你的信息流、知识沉淀、日常工作流全部跑在AI系统上——这是另一回事。就像你不会说自己"在用电"，电就是底层，你所有东西都建在上面。</p>
+
+    <p>这个gap不是能力gap，是观念gap。搭这套系统不需要写代码——大部分工作AI帮我完成了——不需要服务器，不需要花多少钱。需要的是愿意花时间想清楚架构，然后动手去搭。</p>
+
+    <h2>一个延伸的思考</h2>
+
+    <p>搭完这个东西，我一直在想一个问题：为什么"个人AI系统"这件事还没有被产品化？</p>
+
+    <p>市面上有AI笔记工具、AI日程管理、AI写作助手，但没有一个产品把这些串成一个完整的系统。每个工具解决一个点，但你还是得自己当"胶水"。</p>
+
+    <p>OpenClaw的方向其实挺对的——让agent住在你电脑里，持续运转。HappyCapy走的是另一条路——把这些能力搬到云端，降低门槛。两个思路各有取舍，但都在试图解决同一个问题：怎么让普通人也能拥有一套AI工作系统。</p>
+
+    <p>也许问题出在"系统"这个词上。每个人的工作流不一样，很难做一个通用方案。但如果你能降低"搭系统"本身的门槛——让不会写代码的人也能搭出一套属于自己的AI工作流——那这件事的价值就很大了。</p>
+
+    <p>以上，算是一个实验记录。系统还很粗糙，很多地方要改。但方向感比之前清晰了很多。</p>
+
+    <p class="article-signature">Matteo</p>
+  </div>
+</article>
+
+<footer class="article-footer">
+  <div class="article-footer-inner">
+    <a href="/">&larr; Back</a>
+    <p>&copy; 2026 Matteo Cui</p>
+  </div>
+</footer>
+
+</body>
+</html>

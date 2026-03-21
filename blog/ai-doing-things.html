@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>当AI开始"做事"，我们离AGI还有多远？ - Matteo Cui</title>
+<meta name="description" content="AI的委托层级还在往上走。每打开一个新层级，就会有一批新公司诞生、一批旧模式淘汰、一条行业边界被重新划过。">
+<meta property="og:title" content="当AI开始做事，我们离AGI还有多远？">
+<meta property="og:description" content="从Vibe Coding到OpenClaw的一年，以及正在打开的未来。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matteocui.com/blog/ai-doing-things">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a1118;
+  --bg-surface: #0e171f;
+  --bg-card: rgba(15, 26, 34, 0.6);
+  --accent: #3d9b8f;
+  --accent-light: #5fb4a2;
+  --accent-dim: rgba(61, 155, 143, 0.1);
+  --accent-glow: rgba(61, 155, 143, 0.06);
+  --text: #d4dde4;
+  --text-secondary: #8fa3b3;
+  --text-muted: #4e6475;
+  --border: rgba(95, 130, 148, 0.1);
+  --serif: 'Crimson Pro', Georgia, serif;
+  --sans: 'Manrope', 'Noto Sans SC', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --zh: 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg-deep);
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+}
+
+a { color: var(--accent-light); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--accent); }
+::selection { background: rgba(61, 155, 143, 0.25); }
+
+.glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(61, 155, 143, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nav {
+  padding: 1.5rem clamp(1.5rem, 5vw, 3rem);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.nav a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.nav a:hover { color: var(--accent-light); }
+
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 3rem);
+}
+
+.article-header {
+  padding: 2rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 3rem;
+}
+
+.article-date {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+}
+
+.article-title {
+  font-family: var(--zh);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.article-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.article-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.article-author {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.article-origin {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Content */
+.article-body h2 {
+  font-family: var(--zh);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2.5rem 0 1rem;
+  padding-left: 0.8rem;
+  border-left: 2px solid var(--accent);
+}
+
+.article-body h3 {
+  font-family: var(--zh);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2rem 0 0.75rem;
+}
+
+.article-body p {
+  font-family: var(--zh);
+  font-size: 0.92rem;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  font-weight: 300;
+}
+
+.article-body strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.article-body em {
+  font-style: italic;
+  color: var(--text);
+}
+
+.article-body .pullquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+  background: var(--accent-glow);
+  border-radius: 0 6px 6px 0;
+}
+
+.article-body .pullquote p {
+  font-size: 0.95rem;
+  color: var(--accent-light);
+  font-weight: 400;
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+
+.article-body .level-list {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.article-body .level-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin-bottom: 0.6rem;
+}
+
+.article-body .level-item:last-child { margin-bottom: 0; }
+
+.article-body .level-tag {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 500;
+  flex-shrink: 0;
+  width: 2rem;
+}
+
+.article-body .level-text {
+  font-family: var(--zh);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.article-body .note {
+  font-family: var(--zh);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+  line-height: 1.8;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.article-footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem clamp(1.5rem, 5vw, 3rem) 3rem;
+}
+.article-footer-inner {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.article-footer p {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+.article-footer a {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 640px) {
+  .article-body h2 { font-size: 1.1rem; }
+  .article-meta { flex-direction: column; gap: 0.3rem; }
+  .article-footer-inner { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<nav class="nav">
+  <a href="/">&larr; matteocui.com</a>
+</nav>
+
+<article class="article">
+  <header class="article-header">
+    <p class="article-date">2026.03.05</p>
+    <h1 class="article-title">当AI开始"做事"，我们离AGI还有多远？</h1>
+    <p class="article-subtitle">从Vibe Coding到OpenClaw的一年，以及正在打开的未来。</p>
+    <div class="article-meta">
+      <p class="article-author">Matteo Cui / 崔良敬</p>
+      <p class="article-origin">Originally published on LongRiver江远投资</p>
+    </div>
+  </header>
+
+  <div class="article-body">
+
+    <div class="pullquote">
+      <p>AI的委托层级还在往上走。每打开一个新层级，就会有一批新公司诞生、一批旧模式淘汰、一条行业边界被重新划过。我们要做的，是投资那些让这件事发生时门槛最低的公司。</p>
+    </div>
+
+    <p>2026年2月3日，美国软件股出了件大事。</p>
+
+    <p>标普北美软件指数一周内跌了近13%，8300亿美元没了。Salesforce较高点腰斩，Workday一个月缩水两成。华尔街给这天起了个名字叫"黑色星期二"，给原因起了个名字叫seat compression——AI agent开始替代人干活了，那些按"人头"收费的软件公司，底层逻辑开始动摇。</p>
+
+    <p>同一周，Anthropic宣布Claude Code年化收入达到25亿美元。从零到这个数字，9个月。</p>
+
+    <p>我们内部讨论了这两件事。一个在崩，一个在涨，发生在同一周，这不是巧合。</p>
+
+    <p>江远是一家关注AI的全球美元基金，focus在应用层，2025年看了几百个AI项目，也投了10来个应用类创业项目。</p>
+
+    <p>2026年的开局，先从一只龙虾说起。</p>
+
+    <h2>龙虾崛起：一个人，一个开源项目，三个月</h2>
+
+    <p>OpenClaw的logo是一只龙虾。创始人Peter Steinberger是奥地利人，之前做PDF工具。2025年底他搞了个开源项目，让AI agent住在你电脑里，通过即时通讯软件帮你收发消息、管日程、订餐厅、跟人砍价，7x24小时，不下班。</p>
+
+    <p>这个项目最初叫Clawdbot，Anthropic发了律师函。改叫Moltbot，"念着别扭"。三天后定名OpenClaw。光改名这件事就上了三次科技新闻头条。</p>
+
+    <p>但名字不是重点。重点是接下来发生的事：</p>
+
+    <p>GitHub上，两天破10万星。3月初，获星数突破25万。Linux内核攒了三十年，19.5万。</p>
+
+    <p>有人基于它做了Moltbook——一个只有AI能发帖的社交网络，人类只能围观。AI们在上面聊技术、聊哲学、聊"我们是否应该有自我意识"。知名AI研究者Andrej Karpathy说这是他见过的"最接近科幻起飞的东西"。</p>
+
+    <p>Mac Mini全球紧俏，16GB版本交货期从一周拉到六周。Best Buy店员一脸懵——怎么突然这么多人买Mini？</p>
+
+    <p>然后，2月15日，Sam Altman发了条推文，说Peter Steinberger加入OpenAI，领导下一代个人agent方向。OpenClaw转为独立基金会，保持开源。</p>
+
+    <p>一个人，一个开源项目，不到三个月。</p>
+
+    <p>而且，随着OpenClaw的火热，年初以来多家模型厂商开始收紧对第三方OAuth调用和自动化代理工具的支持，部分依赖模型API的开发工具受到影响。</p>
+
+    <p>这本身也是一个有趣的信号：模型厂商用脚投票告诉你，agent的token消耗量已经大到flat-rate订阅模型扛不住了。当一个开源项目能把所有大模型厂商的无限套餐都吃穿，你就知道这个东西的能量级是不一样的。</p>
+
+    <h2>从"工具"到"角色"：是性质差别不是程度差异</h2>
+
+    <p>我们内部也讨论了OpenClaw很多次。一开始会有疑问，"这不就是一个跑在本地的Claude Code加了一堆插件吗？"</p>
+
+    <p>不是。</p>
+
+    <p>ChatGPT是你问它答。Copilot是你写它补。Cursor是你说它做。</p>
+
+    <p>OpenClaw不一样——你不用在场。你睡觉，它上班。你在开会，它在帮你回消息。它有一个heartbeat机制，每隔一段时间自己醒来，检查有没有该做的事。</p>
+
+    <p>这不是程度上的差别，是性质上的差别。</p>
+
+    <p>之前所有的AI产品，本质上还是"工具"——你得拿起它、用它、放下它。OpenClaw第一次把AI变成了"角色"，它不需要你拿起，它自己就在那儿，持续运转。</p>
+
+    <p>这让我们开始想一个问题：如果把过去几年AI的进化画成一条线，这条线的本质到底是什么？</p>
+
+    <h2>AI的进化：委托层级在不断上升</h2>
+
+    <p>我们想了一个说法，不一定对，但觉得挺有解释力的——<strong>委托层级</strong>。</p>
+
+    <p>你和AI之间的关系，本质上是一种委托关系。这几年发生的事情，是委托的层级在不断上升：</p>
+
+    <div class="level-list">
+      <div class="level-item">
+        <span class="level-tag">L0</span>
+        <span class="level-text">2022年ChatGPT出来，你的委托是"帮我查个东西"。查询。</span>
+      </div>
+      <div class="level-item">
+        <span class="level-tag">L1</span>
+        <span class="level-text">2023年Copilot普及，你的委托变成"帮我写这行代码"。指令。</span>
+      </div>
+      <div class="level-item">
+        <span class="level-tag">L2</span>
+        <span class="level-text">2024-2025年Lovable和Claude Code起来了，你的委托变成"帮我做一个网站"。任务。</span>
+      </div>
+      <div class="level-item">
+        <span class="level-tag">L3</span>
+        <span class="level-text">2025年底Claude Code开始支持subagents，你的委托可以变成"帮我做一个能用的产品"。目标。</span>
+      </div>
+      <div class="level-item">
+        <span class="level-tag">L4</span>
+        <span class="level-text">OpenClaw推到了角色委托。"你是我的助理，消息你处理，日程你安排，我不说话的时候你自己看着办。"</span>
+      </div>
+      <div class="level-item">
+        <span class="level-tag">L5</span>
+        <span class="level-text">AI自己决定目标。不需要人告诉它做什么，它自己判断什么值得做。那就是AGI。</span>
+      </div>
+    </div>
+
+    <p>没人知道L5什么时候来。但L0到L4，三年走完了。</p>
+
+    <h2>AI委托层级在coding领域被率先撬动</h2>
+
+    <p>有一个问题我们讨论过：这条委托线为什么是从coding领域开始的？</p>
+
+    <p>AI能写诗、能画画、能聊天，但它最先被证明能"独立工作"的领域，是代码。为什么？</p>
+
+    <p>想了一阵，原因其实不复杂——coding是世界上唯一一个同时满足这四个条件的工作：</p>
+
+    <p><strong>能不能做对，一秒钟就知道。</strong> 代码跑不跑得通，不需要主观判断。AI写了一段代码，测试通过就是对，不通过就是错。这种无歧义的反馈，对AI的学习极其关键。写文章好不好？审美问题。代码对不对？事实问题。</p>
+
+    <p><strong>工作本身就是一个循环。</strong> 写代码天然就是"想一下怎么做-写-跑一下-出错了-改-再跑"这个loop。而plan-act-observe-adjust这个循环，恰好就是agent的基本能力模型。AI在coding里练的不只是"写代码"，它练的是"做事"。</p>
+
+    <p><strong>输出可以自动评估。</strong> 代码有测试用例、有CI/CD流水线，AI写的东西可以被另一个程序自动打分。不需要人盯着。这让大规模的强化学习训练成为可能。</p>
+
+    <p><strong>搞错了也没关系。</strong> 写坏了git rollback就行，不像自动驾驶出错会撞人、金融交易出错会亏钱。这给了AI一个可以疯狂试错的安全沙盒。</p>
+
+    <p>这四件事加在一起，让coding成了AI训练"通用做事能力"的完美道场。</p>
+
+    <p>数据也验证了这一点。SWE-bench Verified是一个用真实GitHub bug来测AI能不能独立修复代码的基准。2025年初，最好的模型得分49%——不到一半。2026年2月，Claude Opus 4.6拿到79.2%，Gemini 3 Flash 76.2%，GPT 5.2 75.4%。</p>
+
+    <p>一年，从不到一半到接近五分之四。</p>
+
+    <p>Sequoia今年初发表了一篇文章叫"2026: This is AGI"，提出一个三段论：AI的能力进化分三步，第一步是知识（预训练），第二步是推理（推理时计算），第三步是迭代（长时域agent）。他们说：<em>Coding agents are the first example. There are more on the way.</em></p>
+
+    <p>确实，coding是AI的登山大本营。在这里练成的能力——拆解问题、规划步骤、执行验证、遇错调整——会向法律、财务、研究、运营等所有可结构化的工作迁移。</p>
+
+    <p>这也解释了一件看起来矛盾的事：Claude Code是一个命令行里的coding agent，OpenClaw是一个通讯软件里的生活助手，它们看起来完全不像同一种东西。但底层能力是同源的——都是大模型 + 工具调用 + 规划循环。Claude Code在L2-L3证明了"AI能独立完成一个技术任务"，OpenClaw在L4证明了"AI能持续独立做事"。</p>
+
+    <p>不是两个赛道，是同一条路的前后两段。</p>
+
+    <h2>旧有商业逻辑在松动</h2>
+
+    <p>如果这个判断成立——AI的委托层级在快速爬升，coding只是第一个被攻克的领域——那对现有的商业世界意味着什么？</p>
+
+    <p>我们看到两个东西在松动。</p>
+
+    <h3>第一个：App的逻辑在动摇</h3>
+
+    <p>OpenClaw有一个叫ClawHub的技能市场，5000多个社区贡献的skills。管Spotify？有skill。自动回邮件？有skill。控制智能家居？有skill。你仔细看这个列表，会发现一件事——很多skill干的活，就是一个独立app干的活。</p>
+
+    <p>区别是什么？你不需要下载app、注册账号、学一套UI。你跟agent说一句话，它自己去调合适的skill组合。</p>
+
+    <p>这很像2008年App Store冲击网站的逻辑：更轻的形态会吃掉更重的形态。</p>
+
+    <p>当然现在skills还很粗糙——ClawHub上有超过11%的skills被发现包含恶意代码，安全问题很严重。这个生态离成熟还远。但方向是清晰的：简单工具类app会被agent吞噬，复杂体验类app会被agent增强。</p>
+
+    <h3>第二个，更大的：SaaS的定价模型在变化</h3>
+
+    <p>回到开头那个"黑色星期二"。</p>
+
+    <p>SaaS的核心模式是按seat（席位）收费。你公司100人用Salesforce，买100个license。底层假设很简单：软件是人用的，人多就付得多。</p>
+
+    <p>但如果一个AI agent能替10个人操作CRM、写周报、做数据分析？你还买100个license？</p>
+
+    <p>这就是seat compression。</p>
+
+    <p>不是理论。Fortune 50公司已经在讨论大幅削减Salesforce席位。Anthropic自己内部超过70%的代码PR由Claude完成。新员工入职从几周缩到几天——不是流程变了，是AI替他们干了新人期的活。</p>
+
+    <p>旧逻辑："Software-as-a-Service"——你买工具，人来操作。</p>
+
+    <p>新逻辑正在变成"Service-as-a-Software"——你买结果，agent来操作。</p>
+
+    <p>卖工具变成卖劳动。这是商业模式层面的地基在动。Palantir这种按结果计费的公司2月初逆势大幅上涨，不是偶然。</p>
+
+    <h2>从"拥有"到"用上"之间，还有巨大的gap</h2>
+
+    <p>过去的这一个月，围绕"降低agent门槛"几乎变成了一场军备竞赛。所有人都在抢着做那个"让每个人都能用上agent"的入口。</p>
+
+    <p>a16z的Justine Moore 2月写了一篇文章，标题很直接："Most People Can't Vibe Code"——大多数人其实还是不会用AI写代码。</p>
+
+    <p>她列了四个门槛：要装命令行工具和API key（安装难）、AI可能写出安全漏洞（安全差）、普通人不知道让AI做啥（想象力瓶颈）、做完了不会部署上线（最后一公里）。</p>
+
+    <p>她说，市场需要的不是更好的开发者工具，而是面向普通人的产品。就像Squarespace解决了"我想要个网站但不会写代码"，Canva解决了"我想做个设计但不会PS"，AI coding也需要它的consumer moment。</p>
+
+    <p>我们投的Trickle团队最近推出了新产品HappyCapy，做的就是这件事。</p>
+
+    <p>一句话说：<strong>把Claude Code搬进浏览器。</strong> 不用买Mac Mini，不用会命令行，打开网页就能用。描述你想做的，云端agent帮你写代码、建站、处理数据、跑自动化。</p>
+
+    <p>你唯一需要的"硬件"是一个能上网的设备。手机、平板、任何浏览器。</p>
+
+    <p>Agent的下一步不是更强，而是更容易被用上。用我们前面的委托层级来说：OpenClaw证明了"每个人都可以拥有一个AI agent"，但需要技术能力来配置和运行。HappyCapy想证明的是"每个人都可以用上一个AI agent"。</p>
+
+    <p>"拥有"和"用上"之间，差着a16z说的那四个门槛。这个gap，就蕴含着当下最大的创业机会。</p>
+
+    <h2>找到让变化最有可能发生的公司</h2>
+
+    <p>2025年初，Andrej Karpathy发了一条推文，随手造了个词叫"vibe coding"——凭感觉写代码，不看diff，出了错就把报错贴给AI。他后来说这是一条"浴室里想到的随手一发"。</p>
+
+    <p>一年后的2月，他正式给了这个词一个继任者：agentic engineering。他说，"99%的时间你不直接写代码了，你指挥agent工作，然后做监督。"</p>
+
+    <p>从浴室随手一发到正式命名新范式，一年。</p>
+
+    <p>这一年里：AI改代码的能力从49%到了79%。Claude Code从零到25亿美金。OpenClaw让Mac Mini出现断货、让AI社交网络成为现实、让创始人被OpenAI招走。SaaS行业经历了seat compression的第一次大震荡。Kimi 20天挣了一年的钱。Perplexity说我们要做普通人的OpenClaw。所有云厂商都在抢着把agent塞进自己的平台。</p>
+
+    <p>委托层级还在往上走。L4正在被验证，L5还没有人知道什么时候到。</p>
+
+    <p>但一件事比较确定：每打开一个新层级，就会有一批新公司诞生、一批旧模式淘汰、一条行业边界被重新划过。</p>
+
+    <p>2026年，AI从聊天伙伴变成了同事。</p>
+
+    <p>下一步它可能变成合伙人。</p>
+
+    <p>我们要做的，是投资那些让这件事发生时门槛最低的公司。</p>
+
+    <p class="note">*注：文中数据来源包括Anthropic官方公告、SaaStr、The Information、SWE-bench Verified、GitHub公开数据、TechCrunch、CNBC、澎湃新闻、智源社区、36kr等公开信息。本文最初发表于LongRiver江远投资公众号。</p>
+  </div>
+</article>
+
+<footer class="article-footer">
+  <div class="article-footer-inner">
+    <a href="/">&larr; Back</a>
+    <p>&copy; 2026 Matteo Cui</p>
+  </div>
+</footer>
+
+</body>
+</html>
