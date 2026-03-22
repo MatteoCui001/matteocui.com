@@ -44,21 +44,19 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  /* Ocean palette — optimized for readability */
-  --bg-deep: #0a1118;
-  --bg-surface: #0e171f;
-  --bg-card: rgba(15, 26, 34, 0.6);
-  --accent: #3d9b8f;
-  --accent-light: #5fb4a2;
-  --accent-dim: rgba(61, 155, 143, 0.1);
-  --accent-glow: rgba(61, 155, 143, 0.06);
-  --text: #e4eaf0;
-  --text-secondary: #b8c8d4;
-  --text-muted: #5d7385;
-  --border: rgba(95, 130, 148, 0.12);
-  --border-hover: rgba(95, 130, 148, 0.22);
+  --bg: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-card: #f3f4f6;
+  --accent: #2b7a6f;
+  --accent-light: #3d9b8f;
+  --accent-dim: rgba(43, 122, 111, 0.08);
+  --accent-glow: rgba(43, 122, 111, 0.04);
+  --text: #111827;
+  --text-secondary: #374151;
+  --text-muted: #9ca3af;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
 
-  /* Fonts */
   --serif: 'Crimson Pro', Georgia, serif;
   --sans: 'Manrope', 'Noto Sans SC', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', monospace;
@@ -69,45 +67,20 @@ html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
 
 body {
   font-family: var(--sans);
-  background: var(--bg-deep);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.7;
-  font-weight: 300;
-}
-
-/* Subtle grain texture */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.3;
+  font-weight: 400;
 }
 
 a { color: inherit; text-decoration: none; }
-::selection { background: rgba(61, 155, 143, 0.25); }
+::selection { background: rgba(43, 122, 111, 0.15); }
 
 /* ── Layout ── */
 .container {
-  max-width: 680px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 0 clamp(1.5rem, 5vw, 3rem);
-}
-
-/* ── Top glow (deep water light) ── */
-.glow {
-  position: fixed;
-  top: -200px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(61, 155, 143, 0.06) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* ── Hero ── */
@@ -125,23 +98,23 @@ a { color: inherit; text-decoration: none; }
 }
 .hero-name-zh {
   font-family: var(--zh);
-  font-size: 0.9rem;
-  font-weight: 300;
+  font-size: 0.85rem;
+  font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.3em;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 .hero-role {
   font-family: var(--zh);
   font-size: 0.88rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.7;
 }
 .hero-role-en {
   font-family: var(--sans);
   font-size: 0.78rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--text-muted);
   margin-top: 0.15rem;
 }
@@ -154,15 +127,16 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.95rem;
   line-height: 1.9;
   color: var(--text-secondary);
-  font-weight: 300;
+  font-weight: 400;
 }
 .about .en {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
   font-style: italic;
   font-family: var(--serif);
   margin-top: 0.5rem;
   line-height: 1.8;
+  font-weight: 400;
 }
 
 /* ── Section divider ── */
@@ -206,10 +180,10 @@ a { color: inherit; text-decoration: none; }
   position: relative;
 }
 .article-entry:hover {
-  background: var(--accent-glow);
+  background: var(--bg-surface);
   border-color: var(--border);
 }
-.article-entry:hover .article-title { color: var(--accent-light); }
+.article-entry:hover .article-title { color: var(--accent); }
 .article-entry:hover .article-arrow { opacity: 1; transform: translateX(0); }
 
 .article-date {
@@ -230,11 +204,10 @@ a { color: inherit; text-decoration: none; }
 }
 .article-subtitle {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   margin-top: 0.4rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.7;
-  opacity: 0.75;
 }
 .article-arrow {
   position: absolute;
@@ -265,7 +238,7 @@ a { color: inherit; text-decoration: none; }
   gap: 0.5rem;
   width: fit-content;
 }
-.contact-link:hover { color: var(--accent-light); }
+.contact-link:hover { color: var(--accent); }
 .contact-link svg { width: 14px; height: 14px; opacity: 0.5; }
 .contact-wechat {
   font-family: var(--zh);
@@ -319,16 +292,14 @@ a { color: inherit; text-decoration: none; }
 </head>
 <body>
 
-<div class="glow"></div>
-
 <main class="container">
 
   <!-- Hero -->
   <header class="hero">
     <h1 class="hero-name fade">Matteo Cui</h1>
     <p class="hero-name-zh fade">崔 良 敬</p>
-    <p class="hero-role fade"><a href="https://lr-investments.com/" target="_blank" style="color: inherit; border-bottom: 1px solid var(--border);">江远投资</a></p>
-    <p class="hero-role-en fade"><a href="https://lr-investments.com/" target="_blank" style="color: inherit;">LongRiver Investments</a></p>
+    <p class="hero-role fade"><a href="https://lr-investments.com/" target="_blank" style="color: var(--text-secondary); border-bottom: 1px solid var(--border);">江远投资</a></p>
+    <p class="hero-role-en fade"><a href="https://lr-investments.com/" target="_blank" style="color: var(--text-muted);">LongRiver Investments</a></p>
   </header>
 
   <!-- About -->
