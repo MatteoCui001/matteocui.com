@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Matteo Cui / 崔良敬</title>
+    <link>https://matteocui.com</link>
+    <description>AI与科技方向的早期投资思考。关注AI系统的构建与应用。</description>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 21 Mar 2026 00:00:00 +0800</lastBuildDate>
+    <atom:link href="https://matteocui.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>我花了一天给自己搭了一套AI工作系统，然后有点想通了一些事</title>
+      <link>https://matteocui.com/blog/ai-personal-os</link>
+      <guid>https://matteocui.com/blog/ai-personal-os</guid>
+      <pubDate>Fri, 21 Mar 2026 00:00:00 +0800</pubDate>
+      <description>如果认真把AI当基础设施来用，能做到什么程度。一个实验记录。</description>
+    </item>
+    <item>
+      <title>当AI开始"做事"，我们离AGI还有多远？</title>
+      <link>https://matteocui.com/blog/ai-doing-things</link>
+      <guid>https://matteocui.com/blog/ai-doing-things</guid>
+      <pubDate>Wed, 05 Mar 2026 00:00:00 +0800</pubDate>
+      <description>从Vibe Coding到OpenClaw的一年，以及正在打开的未来。</description>
+    </item>
+  </channel>
+</rss>
