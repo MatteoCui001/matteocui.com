@@ -44,7 +44,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  /* Ocean palette */
+  /* Ocean palette — optimized for readability */
   --bg-deep: #0a1118;
   --bg-surface: #0e171f;
   --bg-card: rgba(15, 26, 34, 0.6);
@@ -52,11 +52,11 @@
   --accent-light: #5fb4a2;
   --accent-dim: rgba(61, 155, 143, 0.1);
   --accent-glow: rgba(61, 155, 143, 0.06);
-  --text: #d4dde4;
-  --text-secondary: #8fa3b3;
-  --text-muted: #4e6475;
-  --border: rgba(95, 130, 148, 0.1);
-  --border-hover: rgba(95, 130, 148, 0.2);
+  --text: #e4eaf0;
+  --text-secondary: #b8c8d4;
+  --text-muted: #5d7385;
+  --border: rgba(95, 130, 148, 0.12);
+  --border-hover: rgba(95, 130, 148, 0.22);
 
   /* Fonts */
   --serif: 'Crimson Pro', Georgia, serif;
@@ -151,17 +151,18 @@ a { color: inherit; text-decoration: none; }
   padding: 2.5rem 0 0;
 }
 .about p {
-  font-size: 0.92rem;
-  line-height: 1.85;
+  font-size: 0.95rem;
+  line-height: 1.9;
   color: var(--text-secondary);
   font-weight: 300;
 }
 .about .en {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   font-style: italic;
   font-family: var(--serif);
-  margin-top: 0.35rem;
+  margin-top: 0.5rem;
+  line-height: 1.8;
 }
 
 /* ── Section divider ── */
@@ -220,7 +221,7 @@ a { color: inherit; text-decoration: none; }
 }
 .article-title {
   font-family: var(--zh);
-  font-size: 1.05rem;
+  font-size: 1.08rem;
   font-weight: 400;
   line-height: 1.55;
   color: var(--text);
@@ -228,11 +229,12 @@ a { color: inherit; text-decoration: none; }
   padding-right: 2rem;
 }
 .article-subtitle {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.4rem;
   font-weight: 300;
-  line-height: 1.6;
+  line-height: 1.7;
+  opacity: 0.75;
 }
 .article-arrow {
   position: absolute;
@@ -331,8 +333,8 @@ a { color: inherit; text-decoration: none; }
 
   <!-- About -->
   <section class="about fade">
-    <p>关注AI与科技方向的早期投资，也是一个AI系统的重度使用者和构建者。</p>
-    <p class="en">Early-stage investor in AI &amp; technology. Also a builder of AI systems.</p>
+    <p>关注AI与科技方向的早期投资，也是一个AI系统的重度使用者和构建者。在这里写一些关于AI、投资和技术的思考。</p>
+    <p class="en">Early-stage investor in AI &amp; technology. Builder of AI systems. Writing about what I see, build, and think.</p>
   </section>
 
   <div class="divider fade"></div>
@@ -384,6 +386,10 @@ a { color: inherit; text-decoration: none; }
         <svg viewBox="0 0 24 24" fill="currentColor" opacity="0.5"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05a6.12 6.12 0 01-.253-1.736c0-3.556 3.39-6.467 7.58-6.467.249 0 .496.013.739.033C16.434 4.881 12.891 2.188 8.691 2.188z"/></svg>
         公众号 爱咋咋吧
       </span>
+      <a href="/feed.xml" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/></svg>
+        RSS Feed
+      </a>
     </div>
   </section>
 
