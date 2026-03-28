@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我花了一个周末搭微信消息同步，然后微信自己把门打开了 - Matteo Cui</title>
+<meta name="description" content="折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。">
+<meta property="og:title" content="我花了一个周末搭微信消息同步，然后微信自己把门打开了">
+<meta property="og:description" content="折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matteocui.com/blog/wechat-sync-weekend">
+<meta property="og:image" content="https://matteocui.com/cover-image.png">
+<meta property="article:published_time" content="2026-03-22T00:00:00+08:00">
+<meta property="article:author" content="Matteo Cui">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="我花了一个周末搭微信消息同步，然后微信自己把门打开了">
+<meta name="twitter:description" content="折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。">
+<meta name="twitter:image" content="https://matteocui.com/cover-image.png">
+<link rel="canonical" href="https://matteocui.com/blog/wechat-sync-weekend">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="Matteo Cui's Writing" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "我花了一个周末搭微信消息同步，然后微信自己把门打开了",
+  "description": "折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。",
+  "url": "https://matteocui.com/blog/wechat-sync-weekend",
+  "datePublished": "2026-03-22",
+  "author": {
+    "@type": "Person",
+    "name": "Matteo Cui",
+    "url": "https://matteocui.com"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Matteo Cui",
+    "url": "https://matteocui.com"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf8f5;
+  --bg-surface: #f3f0eb;
+  --bg-card: #edeae5;
+  --accent: #2b7a6f;
+  --text: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #999;
+  --border: #e8e4df;
+  --serif: 'Crimson Pro', Georgia, serif;
+  --sans: 'Noto Sans SC', -apple-system, 'PingFang SC', sans-serif;
+}
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+::selection { background: rgba(43, 122, 111, 0.15); }
+
+.nav {
+  padding: 1.5rem clamp(1.5rem, 5vw, 2.5rem);
+  max-width: 660px;
+  margin: 0 auto;
+}
+.nav a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.nav a:hover { color: var(--accent); }
+
+.article {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.article-header {
+  padding: 1.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+
+.article-date {
+  font-family: var(--serif);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.article-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.article-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.article-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+}
+
+.article-body h2 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2.5rem 0 1rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--accent);
+}
+
+.article-body h3 {
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2rem 0 0.75rem;
+}
+
+.article-body p {
+  font-size: 0.93rem;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 1.3rem;
+}
+
+.article-body strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.article-body em {
+  font-style: italic;
+  color: var(--text);
+}
+
+.article-body a {
+  color: var(--accent);
+  border-bottom: 1px solid rgba(43, 122, 111, 0.3);
+}
+
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  border-left: 2px solid var(--accent);
+}
+
+.article-body blockquote p {
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+
+.article-body img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  display: block;
+}
+
+.article-body code {
+  font-size: 0.82rem;
+  background: var(--bg-card);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  color: var(--accent);
+}
+
+.article-body pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.article-body pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.article-body ul, .article-body ol {
+  margin: 1rem 0 1.25rem 1.5rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 2;
+}
+
+.article-body li {
+  margin-bottom: 0.3rem;
+}
+
+.article-body .pipeline {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.article-body .pipeline-title {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+
+.article-body .pipeline-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 0;
+}
+
+.article-body .highlight-card {
+  margin: 2rem auto;
+  padding: 1.25rem 1.5rem;
+  border-left: 2px solid var(--accent);
+  max-width: 90%;
+}
+
+.article-body .highlight-card p {
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 0.93rem;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.article-signature {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.article-footer {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 2rem clamp(1.5rem, 5vw, 2.5rem) 3rem;
+}
+.article-footer-inner {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.article-footer p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.article-footer a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* -- Article Nav (prev/next) -- */
+.article-nav {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+}
+.article-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+}
+.article-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  max-width: 48%;
+}
+.article-nav-link:hover .article-nav-title { color: var(--text); }
+.article-nav-link--next { align-items: flex-end; margin-left: auto; text-align: right; }
+.article-nav-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.article-nav-title {
+  font-size: 0.88rem;
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .article-body h2 { font-size: 1.05rem; }
+  .article-nav-inner { flex-direction: column; gap: 1rem; }
+  .article-nav-link { max-width: 100%; }
+  .article-nav-link--next { align-items: flex-start; text-align: left; }
+  .article-footer-inner { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/">&larr; matteocui.com</a>
+</nav>
+
+<article class="article">
+  <header class="article-header">
+    <p class="article-date">2026.03.22</p>
+    <h1 class="article-title">我花了一个周末搭微信消息同步，然后微信自己把门打开了</h1>
+    <p class="article-subtitle">折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。</p>
+    <p class="article-author">Matteo Cui / 崔良敬</p>
+  </header>
+
+  <div class="article-body">
+    <h1>我花了一个周末搭微信消息同步，然后微信自己把门打开了</h1>
+<p>作为一个每天看AI项目的人，我自己的微信消息处理方式还停留在手动截图阶段。</p>
+<p>周五晚上在公司群里看到一条被投公司的产品更新，想存到Obsidian里。手动截图、复制粘贴、手动打标签——整套流程走下来，我突然觉得有点荒谬。微信里每天沉没的东西太多了：群聊里的行业文章、同事转发的研报、自己发给"文件传输助手"的随手一想。这些东西的命运基本是一样的——变成"我之前好像看过一个什么来着"。</p>
+<p>于是周五晚上开始折腾，一直搞到周六凌晨三四点。</p>
+<h2>和微信玩了一圈躲猫猫</h2>
+<p>核心问题就一个：怎么把微信消息弄出来。</p>
+<p>但微信没有开放的消息API。你想和它对接？它先请你吃一个"由于安全原因，无法登录Web版"。</p>
+<p>我把社区里能找到的方案基本都试了一遍。itchat，最老牌的Python微信库，微信封杀网页版之后就变成了时代的眼泪，新号扫码直接秒封。iPad/UOS协议，模拟iPad或Linux版微信登录，确实能用，但项目作者自己都在README里写着"建议用小号"——做VC的人，微信号被封一天，整个工作基本瘫痪，不敢赌。macOS Accessibility API，有人做了个WeChat MCP，用系统辅助功能读微信窗口内容，不碰协议，但要求微信窗口始终可见、不能锁屏、Mac不能合盖。我试了一下，关一次屏就断一次，放弃了。</p>
+<p>到周六下午，四条路全堵死，开始怀疑人生。</p>
+<p>然后我去看了一眼flomo是怎么做的——它能在个人微信里直接收消息。新枝也能。翻了一圈发现，它们用的都是<strong>企业微信的"客户联系人"</strong>。你扫码添加一个企业微信联系人，它就像普通好友一样出现在通讯录里。给它发消息，后台通过企微客服API就能拉到。官方接口，不怕封号。</p>
+<p>这条路走通的时候大概是周六晚上十点。</p>
+<p>另外我保留了一条辅助通道——微信群聊可以批量转发到Gmail，我写了个IMAP reader去解析。企微客服API适合实时碎片消息，Gmail适合一次性导出一整段群聊讨论。</p>
+<h2>通道不是重点，通道之后才是</h2>
+<p>消息引出来了，接下来的问题更难：什么该存，什么是噪音？</p>
+<p>我搭了个AI分类管道——消息进来先过规则筛选，明显是链接或文件的直接分流，剩下的批量丢给Claude Haiku分类。分完之后各走各路：链接提取全文存Obsidian，闪念存日记，待办变任务。</p>
+<p>听起来顺畅，实际搭的过程全是坑。比如标签——我最早让AI自由打标签，结果同一个主题它能给出"人工智能"、"AI"、"artificial-intelligence"三个不同写法。气得我直接写死了一个29个词的列表，强制它只能从里面选，这才消停了。再比如"闪念"和"待办"的区分——我一开始把所有短消息都归为闪念，结果"明天记得带合同"也被归进去了。想了半天，发现区分的关键不是消息长度，是有没有时间锚点。</p>
+<p>这些设计决策花的时间比写代码还多。</p>
+<p>周六晚上终于跑通了全流程，发了条朋友圈。</p>
+<h2>周日一醒来</h2>
+<p>刷到新闻：微信官方发布了ClawBot插件。</p>
+<p>一条命令装好，手机扫码，OpenClaw就连上了个人微信。官方接口，标准HTTP/JSON。路透社发了稿，知乎炸了锅，腾讯云当天就出了部署教程。</p>
+<p>我前一天晚上还在和企微客服API的token较劲，今天微信自己把正门打开了。</p>
+<p>盯着屏幕看了大概三十秒。</p>
+<h2>但正门上面写着"仅限通行"</h2>
+<p>冷静下来去扒了一圈ClawBot的实测。</p>
+<p>只支持纯文字。图片发不了，文件处理不了，语音"在排期中"但没给时间。不能加群。不能把别人发给你的消息转发给它——有人评论说"可玩性大打折扣"。只能连一个OpenClaw实例。而且有个24小时限制：你超过一天没主动发消息，AI下发的内容会被自动丢弃。</p>
+<p>有人总结得很精准：<strong>"这更像一个微信入口，而不是一个微信通道。"</strong></p>
+<p>反观我搭的企微客服方案：文本、图片、文件、语音、链接、小程序全都支持。可以转发群聊消息。随时拉取，没有24小时窗口。虽然是"走侧门"，但侧门比正门还宽——至少目前是。</p>
+<p>所以接入层不会换。</p>
+<p>但ClawBot值得关注的不是它现在能做什么，而是微信为什么在这个时候做这件事。</p>
+<h2>微信在下什么棋</h2>
+<p>表面看，微信开放ClawBot是在拥抱AI生态。但仔细看它的设计，每一个限制都像是精心设置的护栏。</p>
+<p>不支持群聊——防止自动化bot在群里泛滥。不支持转发别人消息——划定隐私边界。24小时窗口——确保每次交互都是用户主动发起。只能连一个实例——控制复杂度。</p>
+<p><strong>微信不是在说"来吧，随便用"，而是在说"要用可以，走我的管子，按我的规矩"。</strong></p>
+<p>这背后有一个更大的背景。两年前，用非官方协议接入个人微信是灰色地带，微信的态度是封杀。但封杀没有消灭需求——iPad协议、Hook注入、UOS模拟，GitHub上有些项目几十万star，作者自己都拦不住用户拿主号上。微信面对的现实是：如果不提供官方通道，用户就会用非官方的，而非官方通道意味着数据流和交互方式完全不在微信的掌控之内。</p>
+<p>所以ClawBot的推出，与其说是"开放"，不如说是<strong>把野生的需求收编进官方的管道</strong>。</p>
+<p>当然，这个判断可能过于简化。ClawBot也可能只是微信在AI agent场景下的一次试水，先用有限功能测试市场反应和技术可行性，限制条件有些是刻意为之，有些可能纯粹是还没做完。另一个角度是竞争驱动——字节、百度都在推AI agent入口，微信如果完全不动，有被绕过的风险。</p>
+<p>但不管具体动机是哪种，有一个方向是确定的：微信要做的是管子，不是管子里流的东西。马化腾在财报会上说OpenClaw生态要兼顾"中心化能力"和"去中心化分发"——翻译一下就是，微信提供入口和协议标准，但不打算自己做每一个agent。这跟小程序的逻辑一脉相承，但有一个关键区别：小程序是进攻——主动把服务装进来；ClawBot更像防御——如果AI agent注定要进聊天场景，微信宁可自己定义入口，也不要让第三方绕过去。</p>
+<p>从投资的角度看，这个信号比ClawBot本身更值得关注。当微信愿意为AI agent开口子的时候，建在微信生态里的生产力工具、知识管理工具、自动化工作流——这些赛道的天花板可能要重新算了。而flomo、新枝这些已经用企微"侧门"跑通的产品，如果ClawBot的功能逐步放开，它们面对的将是一个"官方通道能力追上来之后，用户为什么还需要你"的问题。</p>
+<h2>这个周末到底花在了什么上</h2>
+<p>回过头看，周末搭的这套东西，接入层只是开始。真正耗时间的是后面那些没法偷懒的决策：</p>
+<p>闪念和待办的分界线在哪。长文该存多少才不臃肿。标签体系怎么设计才能让AI和人都好用。我在Obsidian里有五个投资thesis文档，AI读完文章后自动判断跟哪个相关，加上wikilink——这个功能单独做没意义，但放在自动化管道里就变成了"每篇文章自动跟投资逻辑挂钩"。</p>
+<p>这些决策没有任何平台API能替我做。不管是企微客服还是ClawBot，它们解决的都是消息怎么进来的问题。消息进来之后往哪去、以什么形态留下来——这完全取决于你怎么理解自己的工作。</p>
+<p>所以这个周末，我搭的不是一个微信消息同步工具。我搭的是一套自己的信息分拣规则。接入层以后大概率会被更好的官方方案替代，但那套规则不会。</p>
+<p>比起等微信把门开得再大一点，我更想把管道另一头接好。</p>
+  </div>
+
+  <p class="article-signature">—— Matteo Cui / 崔良敬</p>
+</article>
+
+<!-- Article navigation (prev/next) should be manually added here -->
+
+<footer class="article-footer">
+  <div class="article-footer-inner">
+    <a href="/">&larr; matteocui.com</a>
+    <p>&copy; 2026 Matteo Cui</p>
+  </div>
+</footer>
+
+</body>
+</html>
