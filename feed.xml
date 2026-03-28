@@ -5,8 +5,15 @@
     <link>https://matteocui.com</link>
     <description>AI与科技方向的早期投资思考。关注AI系统的构建与应用。</description>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 21 Mar 2026 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 22 Mar 2026 00:00:00 +0800</lastBuildDate>
     <atom:link href="https://matteocui.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>我花了一个周末搭微信消息同步，然后微信自己把门打开了</title>
+      <link>https://matteocui.com/blog/wechat-sync-weekend</link>
+      <guid>https://matteocui.com/blog/wechat-sync-weekend</guid>
+      <pubDate>Sun, 22 Mar 2026 00:00:00 +0800</pubDate>
+      <description>折腾了一个周末的企微客服API方案，周日醒来发现微信官方发布了ClawBot。但正门比侧门还窄。</description>
+    </item>
     <item>
       <title>我花了一天给自己搭了一套AI工作系统，然后有点想通了一些事</title>
       <link>https://matteocui.com/blog/ai-personal-os</link>
