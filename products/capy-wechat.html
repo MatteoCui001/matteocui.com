@@ -127,45 +127,32 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 2.25rem;
 }
 
-/* ── Platform pills ── */
-.platform-row {
+/* ── Hero meta row ── */
+.hero-meta-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
-.platform-pill {
+.wechat-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-secondary);
   background: white;
   border: 1px solid var(--border);
-  padding: 0.35rem 0.85rem 0.35rem 0.65rem;
+  padding: 0.3rem 0.8rem 0.3rem 0.6rem;
   border-radius: 100px;
-  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
-  cursor: default;
 }
-.platform-pill.clickable {
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
-}
-.platform-pill.clickable:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 2px 8px rgba(43, 122, 111, 0.12);
-  transform: translateY(-1px);
-}
-.platform-pill .dot {
+.wechat-tag .dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: var(--accent);
   flex-shrink: 0;
 }
-.platform-dot-capy { background: #f0a500; }
 .github-link {
   font-size: 0.8rem;
   color: var(--text-muted);
@@ -173,7 +160,6 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 0.4rem;
   transition: color 0.2s;
-  margin-left: 0.25rem;
 }
 .github-link:hover { color: var(--accent); }
 .github-link svg { width: 13px; height: 13px; opacity: 0.55; flex-shrink: 0; }
@@ -291,49 +277,62 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.55;
 }
 
-/* ── Platforms section ── */
-.platforms-grid {
+/* ── Deploy options ── */
+.deploy-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
-.platform-card {
+.deploy-card {
   display: block;
-  padding: 1.25rem 1.35rem;
+  padding: 1.35rem 1.4rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
   text-decoration: none;
   color: inherit;
 }
-.platform-card:hover {
+.deploy-card:hover {
   border-color: var(--accent);
   box-shadow: 0 3px 12px rgba(43, 122, 111, 0.1);
   transform: translateY(-2px);
 }
-.platform-card-icon {
-  font-size: 1.4rem;
-  margin-bottom: 0.65rem;
-  display: block;
-  line-height: 1;
+.deploy-card-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
 }
-.platform-card-name {
-  font-size: 0.9rem;
+.deploy-card-name {
+  font-size: 0.92rem;
   font-weight: 500;
   color: var(--text);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35rem;
 }
-.platform-card-desc {
+.deploy-card-desc {
   font-size: 0.8rem;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.55;
 }
-.platform-card-url {
+.deploy-card-link {
   font-size: 0.75rem;
   color: var(--accent);
-  margin-top: 0.65rem;
+  margin-top: 0.8rem;
   font-family: var(--mono);
   letter-spacing: 0.02em;
+  display: block;
+}
+.deploy-card-cmd {
+  font-size: 0.75rem;
+  color: rgba(232,228,223,0.5);
+  margin-top: 0.8rem;
+  font-family: var(--mono);
+  background: var(--code-bg);
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  display: inline-block;
 }
 
 /* ── Footer ── */
@@ -353,8 +352,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Responsive ── */
 @media (max-width: 520px) {
-  .platforms-grid { grid-template-columns: 1fr; }
-  .platform-row { gap: 0.75rem; }
+  .deploy-grid { grid-template-columns: 1fr; }
+  .hero-meta-row { gap: 0.75rem; }
   .install-inner { padding: 1rem; }
   .install-cmd { font-size: 0.78rem; }
 }
@@ -371,18 +370,14 @@ a { color: inherit; text-decoration: none; }
   <header class="hero">
     <p class="hero-eyebrow animate delay-1">Open Source</p>
     <h1 class="hero-name animate delay-2">capy-wechat</h1>
-    <p class="hero-tagline animate delay-3">把 AI 装进微信</p>
-    <p class="hero-sub animate delay-3">Your personal AI in WeChat — or run it on HappyCapy</p>
+    <p class="hero-tagline animate delay-3">把微信接进你的 AI agent</p>
+    <p class="hero-sub animate delay-3">Bridge WeChat to your local Claude Code — or to HappyCapy in the cloud</p>
 
-    <div class="platform-row animate delay-4">
-      <span class="platform-pill">
+    <div class="hero-meta-row animate delay-4">
+      <span class="wechat-tag">
         <span class="dot"></span>
-        微信 WeChat
+        微信 ClawBot iLink
       </span>
-      <a href="https://www.happycapy.ai" target="_blank" class="platform-pill clickable">
-        <span class="dot platform-dot-capy"></span>
-        HappyCapy
-      </a>
       <a href="https://github.com/MatteoCui001/capy-wechat" target="_blank" class="github-link">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
         GitHub
@@ -402,8 +397,7 @@ a { color: inherit; text-decoration: none; }
       </div>
     </div>
     <p class="install-note">
-      需要 <a href="https://bun.sh" target="_blank">Bun</a> runtime。
-      或直接在 <a href="https://www.happycapy.ai" target="_blank">HappyCapy</a> 上一键部署，无需本地环境。
+      需要 <a href="https://bun.sh" target="_blank">Bun</a> runtime。不想本地跑？见下方 HappyCapy 方式。
     </p>
   </section>
 
@@ -442,20 +436,21 @@ a { color: inherit; text-decoration: none; }
   <div class="divider animate delay-6"></div>
 
   <section class="animate delay-7">
-    <p class="install-label" style="margin-bottom: 1rem;">Run anywhere</p>
-    <div class="platforms-grid">
+    <p class="install-label" style="margin-bottom: 1rem;">两种运行方式</p>
+    <div class="deploy-grid">
 
-      <div class="platform-card" style="cursor: default;">
-        <span class="platform-card-icon">💬</span>
-        <p class="platform-card-name">WeChat</p>
-        <p class="platform-card-desc">通过腾讯官方 iLink API 接入，正规渠道，账号安全</p>
+      <div class="deploy-card" style="cursor: default;">
+        <p class="deploy-card-eyebrow">自托管</p>
+        <p class="deploy-card-name">本地 / 服务器</p>
+        <p class="deploy-card-desc">自己运行 Claude Code 或其他 agent，capy-wechat 作为微信接入层桥接过去</p>
+        <span class="deploy-card-cmd">bun run start</span>
       </div>
 
-      <a href="https://www.happycapy.ai" target="_blank" class="platform-card">
-        <span class="platform-card-icon">🦫</span>
-        <p class="platform-card-name">HappyCapy</p>
-        <p class="platform-card-desc">在 HappyCapy 平台上一键运行，无需自己搭环境</p>
-        <p class="platform-card-url">happycapy.ai ↗</p>
+      <a href="https://www.happycapy.ai" target="_blank" class="deploy-card">
+        <p class="deploy-card-eyebrow">云端 Agent</p>
+        <p class="deploy-card-name">HappyCapy</p>
+        <p class="deploy-card-desc">HappyCapy 是一个 Agent-Native 云端电脑，内置 Claude Code。将微信 ClawBot 接入 HappyCapy，不需要在本地跑任何东西</p>
+        <span class="deploy-card-link">happycapy.ai ↗</span>
       </a>
 
     </div>
