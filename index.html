@@ -171,6 +171,47 @@ a { color: inherit; text-decoration: none; }
   transition: color 0.2s;
 }
 
+/* ── Projects ── */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.project-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.project-entry:hover .project-name { color: var(--accent); }
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.project-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s;
+  font-family: 'Courier New', monospace;
+}
+.project-tag {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--border);
+  padding: 0.1rem 0.5rem;
+  border-radius: 3px;
+}
+.project-desc {
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 /* ── Contact ── */
 .contact {
   padding-bottom: clamp(3rem, 6vh, 5rem);
@@ -259,6 +300,21 @@ a { color: inherit; text-decoration: none; }
         <h2 class="article-title">当AI开始"做事"，我们离AGI还有多远？</h2>
       </a>
 
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="projects">
+    <p class="section-title">Projects</p>
+    <div class="project-list">
+      <a href="/products/capy-wechat" class="project-entry">
+        <div class="project-meta">
+          <span class="project-name">capy-wechat</span>
+          <span class="project-tag">TypeScript</span>
+        </div>
+        <p class="project-desc">用真正的微信账号连接 Claude AI — 支持语音、图片、文件、干活模式</p>
+      </a>
     </div>
   </section>
 
