@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cortex — 帮你在信息洪流中保持清醒的判断力</title>
+<meta name="description" content="AI 原生的认知基础设施。不替用户认知，帮用户看清。">
+<meta property="og:title" content="Cortex — AI-Native Knowledge Infrastructure">
+<meta property="og:description" content="不替用户认知，帮用户看清。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://matteocui.com/cortex">
+<link rel="canonical" href="https://matteocui.com/cortex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:             #faf8f5;
+  --bg-card:        #f3efe9;
+  --bg-dark:        #141210;
+  --bg-dark-2:      #1e1b17;
+  --accent:         #2b7a6f;
+  --accent-light:   #3d9b8f;
+  --accent-subtle:  rgba(43, 122, 111, 0.09);
+  --text:           #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted:     #888;
+  --border:         #e8e4df;
+  --serif:  'Crimson Pro', Georgia, 'Noto Serif SC', serif;
+  --sans:   'Noto Sans SC', -apple-system, 'PingFang SC', sans-serif;
+  --mono:   'Courier New', Courier, monospace;
+}
+
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+::selection { background: rgba(43,122,111,0.15); }
+
+/* ── Containers ── */
+.c  { max-width: 680px;  margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 2.5rem); }
+.cw { max-width: 960px;  margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 3rem); }
+.cf { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 3rem); }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+.a { opacity:0; animation: fadeUp .6s cubic-bezier(.22,.61,.36,1) forwards; }
+.a.d1{animation-delay:.05s}.a.d2{animation-delay:.18s}.a.d3{animation-delay:.32s}
+.a.d4{animation-delay:.46s}.a.d5{animation-delay:.60s}.a.d6{animation-delay:.74s}
+
+/* ── Nav ── */
+.nav {
+  position: sticky; top:0; z-index:50;
+  background: rgba(250,248,245,.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width:1100px; margin:0 auto;
+  padding:0 clamp(1.5rem,5vw,3rem);
+  height:50px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-back { font-size:.78rem; color:var(--text-muted); transition:color .2s; }
+.nav-back:hover { color:var(--accent); }
+.nav-brand { font-family:var(--serif); font-size:1.05rem; font-weight:500; color:var(--text); letter-spacing:-.01em; }
+.nav-right { display:flex; align-items:center; gap:1.5rem; }
+.nav-right a { font-size:.77rem; color:var(--text-muted); transition:color .2s; display:flex; align-items:center; gap:.35rem; }
+.nav-right a:hover { color:var(--accent); }
+.nav-right svg { width:13px; height:13px; opacity:.55; }
+
+/* ── Hero ── */
+.hero {
+  padding: clamp(5rem,12vh,8rem) 0 clamp(4rem,8vh,6rem);
+  position: relative; overflow:hidden;
+}
+.hero-dots {
+  position:absolute; top:0; right:0;
+  width:50%; height:100%;
+  background-image: radial-gradient(circle, rgba(43,122,111,.11) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 90% 90% at 100% 50%, black 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 100% 50%, black 10%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow {
+  font-size:.7rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent); font-weight:500;
+  display:flex; align-items:center; gap:.6rem;
+  margin-bottom:1.25rem;
+}
+.hero-eyebrow-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--accent);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(4.5rem, 13vw, 9rem);
+  font-weight: 300;
+  letter-spacing: -.05em;
+  line-height: .95;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.hero-title em { font-style:italic; color:var(--accent); }
+.hero-desc {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  font-weight:400;
+  color: var(--text-secondary);
+  line-height:1.5;
+  max-width:520px;
+  margin-bottom:.6rem;
+}
+.hero-desc-en {
+  font-family: var(--serif);
+  font-size:1.05rem; font-style:italic; color:var(--text-muted);
+  margin-bottom:3rem;
+}
+.hero-actions {
+  display:flex; align-items:center; gap:.65rem; flex-wrap:wrap;
+}
+.hero-gh {
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.8rem; color:var(--text-muted); transition:color .2s;
+  border:1px solid var(--border);
+  background:white;
+  padding:.35rem .85rem;
+  border-radius:100px;
+}
+.hero-gh:hover { color:var(--accent); border-color:var(--accent); }
+.hero-gh svg { width:13px; height:13px; opacity:.6; }
+.hero-install-btn {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.78rem; font-family:var(--sans); font-weight:500;
+  color:var(--accent); background:var(--accent-subtle);
+  border:1px solid var(--accent-border);
+  padding:.35rem .85rem; border-radius:100px; cursor:pointer;
+  transition:all .2s;
+}
+.hero-install-btn:hover { background:rgba(43,122,111,.14); border-color:var(--accent); }
+.hero-install-btn--agent { color:var(--text-secondary); background:transparent; border-color:var(--border); }
+.hero-install-btn--agent:hover { border-color:var(--text-secondary); background:var(--bg-card); color:var(--text); }
+.hero-install-btn.copied { color:var(--accent); }
+.hero-install-icon { font-size:.7rem; opacity:.7; }
+
+/* ── Section rhythm ── */
+.sec { padding: clamp(4rem,9vh,6.5rem) 0; }
+.sec-label {
+  font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--text-muted); font-weight:500; margin-bottom:1.5rem;
+}
+.sec-rule { width:36px; height:1px; background:var(--accent); margin:1.2rem 0; }
+.divider { height:1px; background:var(--border); }
+
+/* ── Dark band ── */
+.band-dark {
+  background:var(--bg-dark);
+  padding: clamp(4rem,8vh,6rem) 0;
+  position:relative; overflow:hidden;
+}
+.band-dark::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; bottom:0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events:none;
+}
+
+/* ── Problem section ── */
+.problem-split {
+  display:grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: clamp(2rem,5vw,5rem);
+  align-items:start;
+}
+.problem-rule { background:var(--border); }
+.problem-headline {
+  font-family:var(--serif);
+  font-size:clamp(1.6rem,4vw,2.6rem);
+  font-weight:400;
+  line-height:1.25;
+  color:var(--text);
+  margin-bottom:1rem;
+}
+.problem-body {
+  font-family:var(--serif);
+  font-size:clamp(.95rem,2vw,1.2rem);
+  color:var(--text-secondary);
+  line-height:1.75;
+}
+.problem-body em { color:var(--accent); font-style:normal; font-weight:600; }
+
+/* ── Not/Is definition ── */
+.def-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--border); border-radius:10px; overflow:hidden;
+}
+.def-col {
+  padding: clamp(1.75rem,4vw,2.5rem) clamp(1.5rem,3vw,2rem);
+}
+.def-col--not { background:var(--bg); border-right:1px solid var(--border); }
+.def-col--is  { background:var(--bg-card); }
+.def-col-header {
+  font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  font-weight:600; margin-bottom:1.25rem;
+}
+.def-col--not .def-col-header { color:var(--text-muted); }
+.def-col--is  .def-col-header { color:var(--accent); }
+.def-line {
+  font-family:var(--serif);
+  font-size:clamp(1rem,2.2vw,1.25rem);
+  line-height:2.0;
+  color:var(--text-secondary);
+}
+.def-col--not .def-line { text-decoration:line-through; color:var(--text-muted); }
+.def-col--is  .def-line { color:var(--text); }
+
+/* ── 3D framework ── */
+.dim-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden;
+}
+.dim-item {
+  padding:clamp(1.5rem,4vw,2.25rem) clamp(1.25rem,3vw,1.75rem);
+  border-right:1px solid var(--border);
+  transition:background .2s;
+}
+.dim-item:last-child { border-right:none; }
+.dim-item:hover { background:var(--bg-card); }
+.dim-num {
+  font-family:var(--mono); font-size:.65rem; color:var(--accent);
+  letter-spacing:.12em; margin-bottom:.75rem; display:block;
+}
+.dim-name {
+  font-family:var(--serif);
+  font-size:clamp(1.15rem,2.5vw,1.55rem);
+  font-weight:400; color:var(--text);
+  margin-bottom:.25rem; line-height:1.2;
+}
+.dim-name em { font-style:italic; color:var(--accent); }
+.dim-q {
+  font-size:.8rem; color:var(--text-muted); margin-bottom:.85rem;
+  font-family:var(--serif); font-style:italic;
+}
+.dim-rule { width:24px; height:1px; background:var(--border); margin-bottom:.85rem; }
+.dim-desc { font-size:.8rem; color:var(--text-muted); line-height:1.7; }
+.dim-spectrum {
+  margin-top:.85rem; display:flex; flex-wrap:wrap; gap:.25rem;
+}
+.dim-tag {
+  font-size:.6rem; color:var(--text-muted); border:1px solid var(--border);
+  border-radius:3px; padding:.1rem .4rem; font-family:var(--mono);
+}
+
+/* ── Dark pullquote band ── */
+.pullquote-wrap { max-width:780px; margin:0 auto; text-align:center; padding:0 clamp(1.5rem,5vw,3rem); }
+.pullquote-label {
+  font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(255,255,255,.3); font-weight:500; margin-bottom:1.5rem;
+}
+.pullquote {
+  font-family:var(--serif);
+  font-size:clamp(1.6rem,4.5vw,3rem);
+  font-weight:300; font-style:italic;
+  color:rgba(255,255,255,.9);
+  line-height:1.35;
+}
+.pullquote em { color:var(--accent-light); font-style:normal; }
+.pullquote-sub {
+  font-family:var(--serif);
+  font-size:clamp(.9rem,2vw,1.1rem);
+  color:rgba(255,255,255,.35);
+  margin-top:1.5rem;
+  line-height:1.6;
+}
+
+/* ── Value formula ── */
+.formula-pair {
+  display:grid; grid-template-columns:1fr 1fr; gap:.75rem;
+}
+.formula-card {
+  border:1px solid var(--border); border-radius:8px;
+  padding:clamp(1.25rem,3vw,1.75rem) clamp(1.25rem,3vw,1.75rem);
+}
+.formula-card--dynamic { border-color:var(--accent-light); background:var(--accent-subtle); }
+.formula-card-label {
+  font-size:.65rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--text-muted); font-weight:500; margin-bottom:.75rem;
+}
+.formula-card--dynamic .formula-card-label { color:var(--accent); }
+.formula-expr {
+  font-family:var(--serif);
+  font-size:clamp(1.05rem,2.5vw,1.4rem);
+  font-style:italic; color:var(--text);
+  line-height:1.4;
+}
+.formula-expr em { color:var(--accent); font-style:normal; font-weight:600; }
+.formula-desc {
+  font-size:.78rem; color:var(--text-muted);
+  margin-top:.75rem; line-height:1.6;
+}
+
+/* ── Signal types (horizontal strip) ── */
+.signal-strip {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden;
+  margin-top:1.5rem;
+}
+.signal-item {
+  padding:1rem 1.1rem; border-right:1px solid var(--border);
+  transition:background .2s;
+}
+.signal-item:last-child { border-right:none; }
+.signal-item:hover { background:var(--bg-card); }
+.signal-name { font-size:.85rem; font-weight:500; color:var(--text); margin-bottom:.2rem; }
+.signal-desc { font-size:.75rem; color:var(--text-muted); line-height:1.5; font-style:italic; font-family:var(--serif); }
+
+/* ── Scenario ── */
+.scenario-block {
+  background:var(--bg-dark-2);
+  border-radius:10px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.05);
+}
+.scenario-header {
+  padding:1rem 1.4rem;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex; align-items:center; gap:.75rem;
+}
+.scenario-header-label {
+  font-family:var(--mono); font-size:.65rem;
+  color:rgba(255,255,255,.3); letter-spacing:.1em; text-transform:uppercase;
+}
+.scenario-header-title {
+  font-size:.82rem; color:rgba(255,255,255,.6);
+}
+.scenario-body { padding:1.25rem 1.4rem; }
+.scenario-step {
+  display:flex; gap:1rem; align-items:baseline;
+  padding:.65rem 0; border-bottom:1px solid rgba(255,255,255,.04);
+}
+.scenario-step:last-child { border-bottom:none; }
+.scenario-n {
+  font-family:var(--mono); font-size:.7rem;
+  color:var(--accent-light); width:1.5rem; flex-shrink:0;
+}
+.scenario-t {
+  font-size:.82rem; color:rgba(232,228,223,.6); line-height:1.6;
+}
+.scenario-t strong { color:rgba(232,228,223,.9); font-weight:500; }
+.scenario-t .hl { color:var(--accent-light); }
+
+/* ── Before/After paradigm ── */
+.paradigm-header {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:0; margin-bottom:0;
+}
+.paradigm-col-label {
+  padding:.6rem 0; font-size:.68rem; letter-spacing:.15em;
+  text-transform:uppercase; font-weight:600;
+  border-bottom:2px solid var(--border);
+}
+.paradigm-col-label--after { color:var(--accent); border-bottom-color:var(--accent); padding-left:1.25rem; }
+.paradigm-col-label--before { color:var(--text-muted); }
+.paradigm-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--border);
+}
+.paradigm-row:last-child { border-bottom:none; }
+.paradigm-cell {
+  padding:.85rem 0;
+  font-family:var(--serif); font-size:clamp(.9rem,2vw,1.1rem); line-height:1.5;
+}
+.paradigm-cell--before { color:var(--text-muted); padding-right:1.25rem; }
+.paradigm-cell--after  { color:var(--text); font-weight:500; padding-left:1.25rem; border-left:1px solid var(--border); }
+
+/* ── For whom ── */
+.whom-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:.75rem;
+}
+.whom-card {
+  border:1px solid var(--border); border-radius:8px;
+  padding:clamp(1.25rem,3vw,1.75rem) clamp(1.1rem,2.5vw,1.5rem);
+  transition:border-color .2s, box-shadow .2s, transform .15s;
+}
+.whom-card:hover {
+  border-color:var(--accent);
+  box-shadow:0 3px 14px rgba(43,122,111,.1);
+  transform:translateY(-2px);
+}
+.whom-card-eyebrow {
+  font-size:.62rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--text-muted); font-weight:500; margin-bottom:.7rem;
+}
+.whom-card-title { font-size:.92rem; font-weight:500; color:var(--text); margin-bottom:.4rem; }
+.whom-card-desc { font-size:.78rem; color:var(--text-muted); line-height:1.6; }
+
+/* ── Install ── */
+.install-list { display:flex; flex-direction:column; gap:.75rem; }
+.install-option {
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:clamp(1.25rem,3vw,1.75rem);
+  background:white;
+}
+.install-option-head {
+  display:flex; align-items:baseline; gap:.85rem;
+  margin-bottom:1rem;
+}
+.install-option-label {
+  font-size:.65rem; letter-spacing:.15em; text-transform:uppercase;
+  font-weight:500; color:var(--text-muted);
+}
+.install-option-title { font-size:.92rem; font-weight:500; color:var(--text); }
+.install-cmd-wrap {
+  background:var(--bg-dark);
+  border-radius:7px;
+  padding:.75rem 1rem;
+  display:flex; align-items:center; gap:.65rem;
+  margin-bottom:1rem;
+}
+.install-prompt {
+  font-family:var(--mono); font-size:.78rem;
+  color:var(--accent-light); flex-shrink:0; user-select:none;
+}
+.install-cmd-text {
+  font-family:var(--mono); font-size:.78rem;
+  color:rgba(232,228,223,.7); flex:1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.install-msg-wrap {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:.85rem 1rem;
+  font-family:var(--serif); font-size:.9rem;
+  color:var(--text-secondary); line-height:1.65;
+  margin-bottom:1rem;
+}
+.install-option-foot {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.install-option-note { font-size:.75rem; color:var(--text-muted); }
+.install-copy-btn {
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px; padding:.45rem 1rem;
+  font-size:.75rem; font-family:var(--sans); font-weight:500;
+  color:var(--text-secondary); cursor:pointer;
+  transition:all .15s; white-space:nowrap;
+}
+.install-copy-btn:hover { border-color:var(--accent); color:var(--accent); }
+.install-copy-btn.copied { color:var(--accent); border-color:var(--accent-border); background:var(--accent-subtle); }
+
+/* ── Moat dark band ── */
+.moat-split {
+  display:grid; grid-template-columns:1fr 1px 1fr;
+  gap:clamp(2rem,5vw,5rem); align-items:start;
+}
+.moat-rule { background:rgba(255,255,255,.08); }
+.moat-head {
+  font-family:var(--serif); font-size:clamp(1.1rem,2.5vw,1.45rem);
+  font-weight:500; color:rgba(255,255,255,.85);
+  margin-bottom:.6rem; line-height:1.3;
+}
+.moat-body {
+  font-family:var(--serif); font-size:clamp(.9rem,2vw,1.1rem);
+  font-style:italic; color:rgba(255,255,255,.35);
+  line-height:1.7;
+}
+.moat-accent { color:var(--accent-light); font-style:normal; }
+
+/* ── Footer ── */
+.footer {
+  padding:2rem 0 clamp(2.5rem,6vh,4rem);
+  border-top:1px solid var(--border);
+}
+.footer p { font-size:.68rem; color:var(--text-muted); }
+.footer a { transition:color .2s; }
+.footer a:hover { color:var(--accent); }
+
+/* ── Responsive ── */
+@media (max-width:680px) {
+  .problem-split { grid-template-columns:1fr; }
+  .problem-rule { display:none; }
+  .def-grid { grid-template-columns:1fr; }
+  .def-col--not { border-right:none; border-bottom:1px solid var(--border); }
+  .dim-grid { grid-template-columns:1fr; }
+  .dim-item { border-right:none; border-bottom:1px solid var(--border); }
+  .dim-item:last-child { border-bottom:none; }
+  .formula-pair { grid-template-columns:1fr; }
+  .signal-strip { grid-template-columns:1fr 1fr; }
+  .paradigm-row, .paradigm-header { grid-template-columns:1fr; }
+  .paradigm-cell--after { border-left:none; border-top:1px solid var(--border); padding-left:0; }
+  .paradigm-col-label--after { padding-left:0; }
+  .whom-grid { grid-template-columns:1fr; }
+  .install-option-foot { flex-direction:column; align-items:stretch; gap:.5rem; }
+  .install-copy-btn { width:100%; justify-content:center; }
+  .scope-grid { grid-template-columns:1fr; }
+  .moat-split { grid-template-columns:1fr; }
+  .moat-rule { display:none; }
+}
+@media (max-width:480px) {
+  .signal-strip { grid-template-columns:1fr; }
+  .signal-item { border-right:none; border-bottom:1px solid var(--border); }
+  .signal-item:last-child { border-bottom:none; }
+  .nav-right a:not(.nav-gh-link) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <a href="/" class="nav-back">← matteocui.com</a>
+      <span class="nav-brand">Cortex</span>
+    </div>
+    <div class="nav-right">
+      <a href="#philosophy">理念</a>
+      <a href="#install">安装</a>
+      <a href="https://github.com/MatteoCui001/cortex" target="_blank" class="nav-gh-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="cw">
+    <h1 class="hero-title a d1">Cor<em>tex</em></h1>
+    <p class="hero-desc a d2">帮你在信息洪流中，保持清醒的判断力</p>
+    <p class="hero-desc-en a d2">AI-native knowledge infrastructure for humans and agents</p>
+    <div class="hero-actions a d3">
+      <a href="https://github.com/MatteoCui001/cortex" target="_blank" class="hero-gh">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        GitHub
+      </a>
+      <button class="hero-install-btn" onclick="heroInstall('cli', this)">
+        <span class="hero-install-icon">↓</span> 终端安装
+      </button>
+      <button class="hero-install-btn hero-install-btn--agent" onclick="heroInstall('agent', this)">
+        <span class="hero-install-icon">↓</span> 发给 Agent
+      </button>
+    </div>
+    <span style="display:none" id="h-cli">git clone https://github.com/MatteoCui001/cortex.git && cd cortex && ./install.sh</span>
+    <span style="display:none" id="h-agent">帮我安装 Cortex 认知系统。代码库：https://github.com/MatteoCui001/cortex，按照 README 里的步骤安装，安装完成后告诉我服务跑起来了。</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section class="sec" id="philosophy">
+  <div class="cw">
+    <p class="sec-label">The Problem</p>
+    <div class="problem-split">
+      <div>
+        <p class="problem-headline">信息天然不平等，<br>但所有工具假装它们平等</p>
+        <div class="sec-rule"></div>
+        <p class="problem-body">
+          在任何笔记工具里，一篇微信公众号文章和一次专家一手访谈<em>看起来一模一样</em>。<br><br>
+          但它们对你判断的影响，应该完全不同。
+        </p>
+      </div>
+      <div class="problem-rule"></div>
+      <div>
+        <p class="problem-body" style="padding-top:.5rem;">
+          每天流经你的信息，质地迥异——有人的观点、有实测的事实、有随时会过期的情报、有需要长期跟踪的趋势。<br><br>
+          当工具无法区分这些差异，你只能靠大脑自己维护。<br><br>
+          大脑不擅长这个。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT CORTEX IS — Dark Band -->
+<div class="band-dark">
+  <div class="pullquote-wrap">
+    <p class="pullquote-label">Definition</p>
+    <p class="pullquote">Cortex 不是笔记工具。<br>是<em>认知基础设施</em>。</p>
+    <p class="pullquote-sub">
+      信息自己组织，知识主动找人。<br>系统有观点，但判断权永远在你手里。
+    </p>
+  </div>
+</div>
+
+<!-- NOT / IS -->
+<section class="sec">
+  <div class="cw">
+    <p class="sec-label" style="margin-bottom:1.25rem;">Cortex is not...</p>
+    <div class="def-grid">
+      <div class="def-col def-col--not">
+        <div class="def-col-header">以往的工具</div>
+        <p class="def-line">笔记工具</p>
+        <p class="def-line">搜索引擎</p>
+        <p class="def-line">知识管理系统</p>
+        <p class="def-line">又一个 AI 助手</p>
+      </div>
+      <div class="def-col def-col--is">
+        <div class="def-col-header">Cortex 是</div>
+        <p class="def-line"><strong>认知基础设施</strong></p>
+        <p class="def-line">信息自己组织，知识主动找人</p>
+        <p class="def-line">判断权永远在你手里</p>
+        <p class="def-line">每条信息有来源权重、性质分类、时效管理</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 DIMENSIONS -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">Framework — 信息的三个固有维度</p>
+    <div class="dim-grid">
+      <div class="dim-item">
+        <span class="dim-num">01</span>
+        <p class="dim-name">Source<br><em>来源</em></p>
+        <p class="dim-q">从哪来的？</p>
+        <div class="dim-rule"></div>
+        <p class="dim-desc">决定可信度权重。同样一个结论，来自一手访谈和来自转发文章，对判断的影响应该完全不同。</p>
+        <div class="dim-spectrum">
+          <span class="dim-tag">一手经历</span>
+          <span class="dim-tag">专家对话</span>
+          <span class="dim-tag">朋友转发</span>
+          <span class="dim-tag">公开文章</span>
+        </div>
+      </div>
+      <div class="dim-item">
+        <span class="dim-num">02</span>
+        <p class="dim-name">Nature<br><em>性质</em></p>
+        <p class="dim-q">是什么东西？</p>
+        <div class="dim-rule"></div>
+        <p class="dim-desc">决定处理方式。观点需要追踪正反、事实可以引用、直觉应该保留原样——它们不该被同样对待。</p>
+        <div class="dim-spectrum">
+          <span class="dim-tag">观点</span>
+          <span class="dim-tag">事实</span>
+          <span class="dim-tag">方法</span>
+          <span class="dim-tag">直觉</span>
+          <span class="dim-tag">问题</span>
+        </div>
+      </div>
+      <div class="dim-item">
+        <span class="dim-num">03</span>
+        <p class="dim-name">Temporality<br><em>时效</em></p>
+        <p class="dim-q">什么时候失效？</p>
+        <div class="dim-rule"></div>
+        <p class="dim-desc">决定生命周期。永久性事实不会衰减，时效情报会过期，可验证预测需要回来检验。</p>
+        <div class="dim-spectrum">
+          <span class="dim-tag">永久事实</span>
+          <span class="dim-tag">持续趋势</span>
+          <span class="dim-tag">时效情报</span>
+          <span class="dim-tag">待验预测</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE INSIGHT — value is dynamic -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">Core Insight</p>
+    <p style="font-family:var(--serif);font-size:clamp(1.2rem,3vw,1.65rem);font-weight:400;color:var(--text);line-height:1.4;margin-bottom:1.25rem;">
+      信息的价值是动态的
+    </p>
+    <p style="font-family:var(--serif);font-size:clamp(.95rem,2vw,1.15rem);color:var(--text-secondary);line-height:1.8;max-width:600px;margin-bottom:2rem;">
+      同一条信息，在不同的时间点、不同的知识状态下，对你的意义完全不同。
+      Cortex 不只存储信息，它持续计算信息对你此刻的价值。
+    </p>
+    <div class="formula-pair" style="max-width:640px;">
+      <div class="formula-card">
+        <p class="formula-card-label">录入时确定</p>
+        <p class="formula-expr">信息 = 来源 × 性质 × 时效</p>
+        <p class="formula-desc">每条信息在录入时完成三维标注，这部分是稳定的。</p>
+      </div>
+      <div class="formula-card formula-card--dynamic">
+        <p class="formula-card-label">持续动态计算</p>
+        <p class="formula-expr">价值 = <em>f</em>(信息, 你的知识状态)</p>
+        <p class="formula-desc">随着你的认知演化，旧信息会在新上下文中被重新激活。</p>
+      </div>
+    </div>
+    <div class="signal-strip">
+      <div class="signal-item">
+        <p class="signal-name">New Signal</p>
+        <p class="signal-desc">拓展你的认知边界</p>
+      </div>
+      <div class="signal-item">
+        <p class="signal-name">Contradiction</p>
+        <p class="signal-desc">挑战你现有的判断</p>
+      </div>
+      <div class="signal-item">
+        <p class="signal-name">Answer</p>
+        <p class="signal-desc">回应你的开放问题</p>
+      </div>
+      <div class="signal-item">
+        <p class="signal-name">Bridge</p>
+        <p class="signal-desc">连接两段无关的认知</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENARIO — a real story -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">Scenario — 一条信息的旅程</p>
+    <p style="font-family:var(--serif);font-size:clamp(1rem,2.2vw,1.25rem);color:var(--text-secondary);line-height:1.7;margin-bottom:1.75rem;max-width:560px;">
+      你转发了一篇研报，Cortex 接下来做了什么？
+    </p>
+    <div class="scenario-block">
+      <div class="scenario-header">
+        <span class="scenario-header-label">input</span>
+        <span class="scenario-header-title">转发：「HJT 银耗降至 15mg/片」研报，备注"有道理"</span>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-step">
+          <span class="scenario-n">01</span>
+          <span class="scenario-t"><strong>提取</strong> — 识别实体「HJT」「银耗」，提取关键结论，向量化存储</span>
+        </div>
+        <div class="scenario-step">
+          <span class="scenario-n">02</span>
+          <span class="scenario-t"><strong>分类</strong> — 来源：公开研报（权重 0.50）/ 性质：事实性主张 / 时效：时效情报</span>
+        </div>
+        <div class="scenario-step">
+          <span class="scenario-n">03</span>
+          <span class="scenario-t"><strong>关联</strong> — 匹配到「光伏去银化」研究主题，连接既有实体图谱</span>
+        </div>
+        <div class="scenario-step">
+          <span class="scenario-n">04</span>
+          <span class="scenario-t"><strong>矛盾检测</strong> — 发现 2 个月前专家访谈：「银耗难以降到 20mg 以下」（权重 0.80）</span>
+        </div>
+        <div class="scenario-step">
+          <span class="scenario-n">05</span>
+          <span class="scenario-t"><strong>推送</strong> — <span class="hl">「新数据与一手访谈矛盾，是否需要重新评估该判断？」</span></span>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--serif);font-style:italic;font-size:.88rem;color:var(--text-muted);margin-top:1rem;line-height:1.6;">
+      你不需要记得两个月前那次访谈。Cortex 记得，并在对的时候告诉你。
+    </p>
+  </div>
+</section>
+
+<!-- PARADIGM SHIFT -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">Paradigm Shift — 不是加了 AI 的笔记</p>
+    <div style="max-width:760px;">
+      <div class="paradigm-header">
+        <div class="paradigm-col-label paradigm-col-label--before">以往的工具</div>
+        <div class="paradigm-col-label paradigm-col-label--after">Cortex</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">用户手动打 tag、建链接</div>
+        <div class="paradigm-cell paradigm-cell--after">系统自动提取实体、建立关联、三维分类</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">主动搜索才能找到</div>
+        <div class="paradigm-cell paradigm-cell--after">系统主动推送相关发现</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">所有信息同等对待</div>
+        <div class="paradigm-cell paradigm-cell--after">信息有来源权重、性质分类、时效管理</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">靠自己发现矛盾</div>
+        <div class="paradigm-cell paradigm-cell--after">系统自动检测矛盾并提醒</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">历史信息沉入遗忘</div>
+        <div class="paradigm-cell paradigm-cell--after">旧信息在新上下文中被重新激活</div>
+      </div>
+      <div class="paradigm-row">
+        <div class="paradigm-cell paradigm-cell--before">笔记是终点</div>
+        <div class="paradigm-cell paradigm-cell--after">每条输入都在更新整个知识图谱</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHOM -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">For — 需要在信息时代保持清醒的人</p>
+    <p style="font-family:var(--serif);font-size:clamp(1.1rem,2.8vw,1.5rem);font-weight:400;color:var(--text);line-height:1.4;max-width:580px;margin-bottom:.75rem;">
+      信息越多，判断越难。
+    </p>
+    <p style="font-family:var(--serif);font-size:clamp(.95rem,2vw,1.15rem);color:var(--text-secondary);line-height:1.75;max-width:560px;margin-bottom:2rem;">
+      不是缺信息，是缺一个系统——帮你区分信号与噪声，帮你在三个月前的判断和今天的新数据之间建立对话。
+    </p>
+    <div class="whom-grid">
+      <div class="whom-card">
+        <p class="whom-card-title">VC / 买方研究</p>
+        <p class="whom-card-desc">跟踪多个主题，在碎片信息中识别真正的信号。错过一个判断转折点，代价可能是真金白银。</p>
+      </div>
+      <div class="whom-card">
+        <p class="whom-card-title">卖方 / 行业研究</p>
+        <p class="whom-card-desc">每天处理大量信息流，需要从碎片中结构化，对同一公司形成跨越时间的认知积累。</p>
+      </div>
+      <div class="whom-card">
+        <p class="whom-card-title">创业者 / PM</p>
+        <p class="whom-card-desc">持续验证市场假设，决策周期长，信息来源分散，需要系统帮助追踪判断的演化轨迹。</p>
+      </div>
+    </div>
+    <p style="font-family:var(--serif);font-style:italic;font-size:.88rem;color:var(--text-muted);margin-top:1.25rem;">
+      更广泛地说：任何需要在不确定性中做出持续判断的人。
+    </p>
+  </div>
+</section>
+
+<!-- MOAT — dark band -->
+<div class="band-dark">
+  <div class="cw">
+    <div class="moat-split">
+      <div>
+        <p style="font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:500;margin-bottom:1.25rem;">Why it gets better</p>
+        <p class="moat-head">你的知识图谱越用越强</p>
+        <p class="moat-body">不是软件在学习，是你的思路在系统里变得可见。六个月积累的认知轨迹，是你自己的资产。</p>
+      </div>
+      <div class="moat-rule"></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:1.5rem;">
+        <div>
+          <p class="moat-head" style="font-size:clamp(1rem,2vw,1.2rem);">系统有观点</p>
+          <p class="moat-body">「5 篇文章来自 3 个独立信源，都在说同一件事」</p>
+        </div>
+        <div>
+          <p class="moat-head" style="font-size:clamp(1rem,2vw,1.2rem);color:var(--accent-light);">但判断权在你</p>
+          <p class="moat-body">系统不会说「你应该相信这个」</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL -->
+<section class="sec" id="install">
+  <div class="cw">
+    <p class="sec-label" style="margin-bottom:.75rem;">Get Started</p>
+    <p style="font-family:var(--serif);font-size:clamp(1rem,2.5vw,1.3rem);color:var(--text-secondary);line-height:1.6;max-width:520px;margin-bottom:2rem;">
+      两种方式，根据你的情况选一个。
+    </p>
+    <div class="install-list">
+
+      <!-- CLI -->
+      <div class="install-option">
+        <div class="install-option-head">
+          <span class="install-option-label">方式一 · 终端</span>
+          <span class="install-option-title">自己在本地跑</span>
+        </div>
+        <div class="install-cmd-wrap">
+          <span class="install-prompt">$</span>
+          <span class="install-cmd-text" id="cli-cmd">git clone https://github.com/MatteoCui001/cortex.git && cd cortex && ./install.sh</span>
+        </div>
+        <div class="install-option-foot">
+          <span class="install-option-note">需要 macOS + git（通常已预装），约 10 分钟</span>
+          <button class="install-copy-btn" id="cli-btn" onclick="copyInstall('cli-cmd','cli-btn')">复制命令</button>
+        </div>
+      </div>
+
+      <!-- Agent -->
+      <div class="install-option">
+        <div class="install-option-head">
+          <span class="install-option-label">方式二 · Agent</span>
+          <span class="install-option-title">发给你的 AI agent</span>
+        </div>
+        <div class="install-msg-wrap" id="agent-msg">帮我安装 Cortex 认知系统。代码库：https://github.com/MatteoCui001/cortex，按照 README 里的步骤安装，安装完成后告诉我服务跑起来了。</div>
+        <div class="install-option-foot">
+          <span class="install-option-note">已接入微信或其他 agent 平台的用户</span>
+          <button class="install-copy-btn" id="agent-btn" onclick="copyInstall('agent-msg','agent-btn')">复制指令</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section style="padding:clamp(2rem,5vh,3.5rem) 0 0;">
+  <div class="c" style="text-align:center;">
+    <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:.5rem;">想了解这个项目背后的思考过程？</p>
+    <a href="/blog/notion-to-cortex" style="font-family:var(--serif);font-size:.95rem;color:var(--accent);border-bottom:1px solid var(--accent-border);">从 Notion 到自己写代码：一个投资人的知识管理折腾史 &rarr;</a>
+  </div>
+</section>
+
+<!-- LIMITATIONS -->
+<section style="padding-bottom:clamp(4rem,9vh,6.5rem);">
+  <div class="cw">
+    <div class="divider" style="margin-bottom:clamp(4rem,9vh,6.5rem);"></div>
+    <p class="sec-label">Scope — 几件想说清楚的事</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);align-items:start;">
+      <div>
+        <p style="font-family:var(--serif);font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:400;color:var(--text);line-height:1.4;margin-bottom:1rem;">
+          这是一个个人工具，不是 SaaS 产品。
+        </p>
+        <p style="font-family:var(--serif);font-size:clamp(.9rem,2vw,1.1rem);color:var(--text-secondary);line-height:1.85;margin-bottom:1rem;">
+          没有托管版，没有客服，没有自动 onboarding。数据完全在你本地，这是有意的——你拥有你的知识图谱，没有第三方可以访问它。
+        </p>
+        <p style="font-family:var(--serif);font-size:clamp(.9rem,2vw,1.1rem);color:var(--text-secondary);line-height:1.85;">
+          目前不在版本范围里的东西：团队协作、云端同步、移动端原生 app。这些不是遗漏，是边界——先把个人用好，再谈扩展。
+        </p>
+      </div>
+      <div>
+        <p style="font-family:var(--serif);font-size:clamp(1.1rem,2.5vw,1.4rem);font-weight:400;color:var(--text);line-height:1.4;margin-bottom:1rem;">
+          还有一个更深的问题。
+        </p>
+        <p style="font-family:var(--serif);font-size:clamp(.9rem,2vw,1.1rem);color:var(--text-secondary);line-height:1.85;margin-bottom:1.5rem;">
+          如果有一天 AI 能帮你记住所有读过的东西、发现所有没注意到的矛盾、在需要的时候把正确的信息推到你面前——你剩下该做的是什么？
+        </p>
+        <p style="font-family:var(--serif);font-style:italic;font-size:clamp(1rem,2.2vw,1.2rem);color:var(--accent);line-height:1.5;border-left:2px solid var(--accent-border);padding-left:1rem;">
+          大概就是判断吧。<br>而判断这件事，暂时还得自己来。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="cw">
+    <p>
+      &copy; 2026 Matteo Cui
+      &nbsp;·&nbsp;
+      <a href="https://github.com/MatteoCui001/cortex" style="color:var(--text-muted)">GitHub</a>
+      &nbsp;·&nbsp;
+      <a href="/blog/notion-to-cortex" style="color:var(--text-muted)">背后的故事</a>
+      &nbsp;·&nbsp;
+      <a href="/products/capy-wechat" style="color:var(--text-muted)">capy-wechat</a>
+      &nbsp;·&nbsp;
+      <a href="/" style="color:var(--text-muted)">matteocui.com</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+function copyInstall(id, btnId) {
+  const text = document.getElementById(id).textContent.trim();
+  const btn = document.getElementById(btnId);
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '已复制 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2200);
+  });
+}
+function heroInstall(type, btn) {
+  const id = type === 'cli' ? 'h-cli' : 'h-agent';
+  const text = document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '已复制 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2200);
+  });
+}
+</script>
+
+</body>
+</html>

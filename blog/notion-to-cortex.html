@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从 Notion 到自己写代码：一个投资人的知识管理折腾史 - Matteo Cui</title>
+<meta name="description" content="搭了半年管道之后，我发现底层缺一个东西，于是自己动手做了。">
+<meta property="og:title" content="从 Notion 到自己写代码：一个投资人的知识管理折腾史">
+<meta property="og:description" content="搭了半年管道之后，我发现底层缺一个东西，于是自己动手做了。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://matteocui.com/blog/notion-to-cortex">
+<meta property="og:image" content="https://matteocui.com/cover-image.png">
+<meta property="article:published_time" content="2026-04-01T00:00:00+08:00">
+<meta property="article:author" content="Matteo Cui">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="从 Notion 到自己写代码：一个投资人的知识管理折腾史">
+<meta name="twitter:description" content="搭了半年管道之后，我发现底层缺一个东西，于是自己动手做了。">
+<meta name="twitter:image" content="https://matteocui.com/cover-image.png">
+<link rel="canonical" href="https://matteocui.com/blog/notion-to-cortex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate" type="application/rss+xml" title="Matteo Cui's Writing" href="/feed.xml">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "从 Notion 到自己写代码：一个投资人的知识管理折腾史",
+  "description": "搭了半年管道之后，我发现底层缺一个东西，于是自己动手做了。",
+  "url": "https://matteocui.com/blog/notion-to-cortex",
+  "datePublished": "2026-04-01",
+  "author": {
+    "@type": "Person",
+    "name": "Matteo Cui",
+    "url": "https://matteocui.com"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Matteo Cui",
+    "url": "https://matteocui.com"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #faf8f5;
+  --bg-surface: #f3f0eb;
+  --accent: #2b7a6f;
+  --text: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #999;
+  --border: #e8e4df;
+  --serif: 'Crimson Pro', Georgia, serif;
+  --sans: 'Noto Sans SC', -apple-system, 'PingFang SC', sans-serif;
+}
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--text); }
+::selection { background: rgba(43, 122, 111, 0.15); }
+
+.nav {
+  padding: 1.5rem clamp(1.5rem, 5vw, 2.5rem);
+  max-width: 660px;
+  margin: 0 auto;
+}
+.nav a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.nav a:hover { color: var(--accent); }
+
+.article {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.article-header {
+  padding: 1.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+
+.article-date {
+  font-family: var(--serif);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.article-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+}
+
+.article-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.article-meta {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+  align-items: center;
+}
+
+.article-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Content */
+.article-body h2 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text);
+  margin: 2.5rem 0 1rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--accent);
+}
+
+.article-body p {
+  font-size: 0.93rem;
+  line-height: 2;
+  color: var(--text-secondary);
+  margin-bottom: 1.3rem;
+}
+
+.article-body strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.article-body em {
+  font-style: italic;
+  color: var(--text);
+}
+
+.article-body .pullquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.article-body .pullquote p {
+  font-size: 0.93rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+
+.article-body .note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.9;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.article-body .note a {
+  color: var(--accent);
+}
+
+/* Product callout */
+.product-callout {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.product-callout-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.product-callout-text strong {
+  color: var(--text);
+  font-weight: 500;
+}
+.product-callout-link {
+  font-size: 0.8rem;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.product-callout-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* CTA */
+.article-cta {
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+.article-cta p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 1rem;
+}
+.article-cta .cta-email {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Footer & Nav */
+.article-footer {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 2rem clamp(1.5rem, 5vw, 2.5rem) 3rem;
+}
+.article-footer-inner {
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.article-footer p {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+.article-footer a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.article-nav {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 2.5rem);
+}
+.article-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+}
+.article-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  max-width: 48%;
+}
+.article-nav-link:hover .article-nav-title { color: var(--text); }
+.article-nav-link--next { align-items: flex-end; margin-left: auto; text-align: right; }
+.article-nav-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.article-nav-title {
+  font-size: 0.88rem;
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .article-body h2 { font-size: 1.05rem; }
+  .article-meta { flex-direction: column; gap: 0.3rem; }
+  .article-nav-inner { flex-direction: column; gap: 1rem; }
+  .article-nav-link { max-width: 100%; }
+  .article-nav-link--next { align-items: flex-start; text-align: left; }
+  .article-footer-inner { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+  .product-callout { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/">&larr; matteocui.com</a>
+</nav>
+
+<article class="article">
+  <header class="article-header">
+    <p class="article-date">2026.04.01</p>
+    <h1 class="article-title">从 Notion 到自己写代码：一个投资人的知识管理折腾史</h1>
+    <p class="article-subtitle">搭了半年管道之后，我发现底层缺一个东西，于是自己动手做了。</p>
+    <div class="article-meta">
+      <p class="article-author">Matteo Cui / 崔良敬</p>
+    </div>
+  </header>
+
+  <div class="article-body">
+
+    <p>我从学生时代开始用 Notion，也曾经是个狂热爱好者。</p>
+
+    <p>从学生时代的课程笔记、到工作中的投资纪要、会议记录、项目思考、行业研究——所有跟工作相关的东西都在里面，一切看起来都在运转。但有些东西始终没安置好。</p>
+
+    <p>我也有写日记的习惯，也会在微信读书里做大量标注——读到一段话觉得跟最近看的某个项目有关，顺手划线加个批注。看到某个公众号文章感觉有意思，又手动复制粘贴进去。此外投资纪要是另一套格式，IC 会上的讨论记录又是一种。读完一本书写的感想，跟访谈纪要里的某个判断可能有关联，但它们分别待在 Notion 的不同数据库、微信读书的导出文件、手机备忘录、和电脑中无数的 word 文件中。</p>
+
+    <div class="pullquote">
+      <p>同一个人的思考，被工具切成了互不相认的碎片。</p>
+    </div>
+
+    <p>那时候没觉得是工具架构的问题。只觉得是自己不够勤快——要是每周花两个小时好好整理一下，应该就能串起来。后来发现，这个假设本身就是错的。你不应该需要"整理"。信息应该自己知道自己属于哪里。</p>
+
+    <h2>Obsidian + Claude Code</h2>
+
+    <p>2025 年下半年，把笔记系统搬到了 Obsidian。动机不只是换一个笔记工具——是发现 Claude Code 可以直接操作本地文件。</p>
+
+    <p>Obsidian 的本质是一个文件夹。Claude Code 可以读、写、搜索这个文件夹里的任何东西。这意味着"知识管理"突然变成了可编程的。以前需要手动做的事情，现在可以写成自动化管道。</p>
+
+    <p>于是开始不断折腾。从微信消息同步，试了 itchat（秒封）、iPad 协议（怕封号）、macOS Accessibility API（合盖就断）、Hook 注入（不敢用主号），最后走通了企微客服 API 加 Gmail IMAP 的组合。PLAUD 会议录音自动转写存进 Obsidian。微信读书的标注和笔记定期同步。Gmail 里的行业邮件自动提取。网页文章全文抓取加摘要。日记每天同步，每周自动回顾我本周/本月的所有材料并强制要求我进行反思总结。</p>
+
+    <p>每搭一条管道，信息入口就多一个。那段时间很兴奋，觉得终于在用 AI "正确地做事"了。之前写的两篇文章——<a href="/blog/ai-personal-os">搭 AI 工作系统</a>、<a href="/blog/wechat-sync-weekend">做微信消息同步</a>——就是那个阶段的记录。</p>
+
+    <h2>管道越多，问题越清楚</h2>
+
+    <p>但管道搭到第五六条的时候，兴奋感消退了。不是管道出了问题，是管道越多，一个更根本的缺陷越明显——这个缺陷在 Notion 时代就存在，只是那时候信息来源少、量小，手动整理勉强能撑住，被掩盖了。现在每天几十条消息自动灌进 Obsidian，它变得无法忽视：</p>
+
+    <div class="pullquote">
+      <p>信息进来了，然后呢？</p>
+    </div>
+
+    <p>微信来了一条行业新闻，AI 帮我打了标签存进 Obsidian。三天后另一条新闻跟它矛盾了——但没有人告诉我。它们安静地躺在两个不同的 markdown 文件里，彼此不认识。</p>
+
+    <p>我在 Obsidian 里有几个投资 thesis 文档。每周读几十篇文章，有些跟 thesis 相关，有些不相关，关联完全靠手动判断。说实话很多时候我自己也记不住。要回头翻之前的纪要、日记、复盘总结，才突然发现——原来三个月前我写过一句跟现在完全矛盾的判断。日记里随手写的一句感想，和一次访谈纪要里专家说的某句话，可能指向同一个结论。但它们永远不会自己碰上。</p>
+
+    <p>所有现有工具解决的都是"存"的问题。但知识管理的真正难题不是怎么存，是什么时候该知道什么。</p>
+
+    <h2>信息天然不平等</h2>
+
+    <p>而"什么时候该知道什么"这个问题往下再挖一层，会碰到一个更底层的东西：不是所有信息都值得被同等对待。</p>
+
+    <p>在 Obsidian 里，一篇微信公众号转载的文章和一次专家一手访谈的笔记长得一模一样——都是一个 markdown 文件。但它们对投资判断的影响完全不同。一手的、一线的、有利益冲突的、道听途说的——这些维度在任何笔记工具里都不存在。</p>
+
+    <p>这不是标签能解决的。标签是分类，不是理解。</p>
+
+    <p>如果要量化这种"不平等"，至少需要三个维度。来源，决定可信度——一手经历和刷到的文章不应该有同等权重。性质，决定怎么处理——一个观点需要追踪立场变化，一个事实需要可验证，一个直觉需要保留等待印证。时效，决定生命周期——有些信息永远有效，有些三个月后就过期了。</p>
+
+    <p>而且信息的真正价值是动态的。同一条消息对我来说，可能是新信号，可能是重复，也可能跟我上周看到的东西矛盾。这个判断需要理解我当前的"知识状态"——我已经知道什么、在追踪什么、对什么持有什么立场。关键词匹配做不到这件事。</p>
+
+    <p>但有一个原则我很确定：判断权永远在用户手里。系统不应该告诉你"你对这个方向的置信度是 61%"。系统应该做的是把你自己都看不清的证据地图铺在你面前，让你自己判断。而用户在收到信息时最自然的反应——"有道理"、"扯淡"、"先放着"——是比任何结构化标签都真实的元数据。</p>
+
+    <h2>为什么自己写</h2>
+
+    <p>想清楚问题之后，第一反应当然是找现成的。市面上的 AI 笔记工具看了一圈：Notion AI 本质是搜索增强，Mem 做自动组织，Reflect 是对话式。它们都在给"笔记"加 AI 功能，但没有人在重新定义底层数据模型。</p>
+
+    <p>核心区别在于：现有工具的原子单元是"文件"或"块"。但如果底层不是文件，是 event 呢？</p>
+
+    <p>每条信息是一个 event——有来源、时间、类型、向量嵌入、实体关联。不是笔记本里的一页，是知识图谱中的一个节点。同一个 event 可以来自微信、PDF、网页、会议纪要——进入系统后形态统一。</p>
+
+    <p>而"Agent-Native"意味着 API 是整个系统的主接口，不是给前端用的附属品。AI Agent 可以直接写入、搜索、标注、订阅信号。知识系统不只服务人类用户，也服务 Agent。</p>
+
+    <p>找了一圈发现没有现成方案做这件事，于是开始自己做。项目叫 Cortex。</p>
+
+    <div class="product-callout">
+      <span class="product-callout-text"><strong>Cortex</strong> — AI-native 认知基础设施，开源项目</span>
+      <a href="/products/cortex" class="product-callout-link">了解更多 &rarr;</a>
+    </div>
+
+    <p>说"写代码"其实不完全准确。Cortex 的主体思路是我拿着手机跟 HappyCapy 聊天聊出来的——爬山的时候、出差的飞机上、高铁上、车后座上。把想法说清楚，它帮我搭架构、写代码。我做决策和方向判断，它做执行。当然也要感谢我的 Codex，在项目代码审核测试上贡献卓著。这大概也是 2025 年做 side project 的典型姿势：人负责想清楚为什么做、做什么，AI 负责怎么做。</p>
+
+    <h2>做的过程中才理解的事</h2>
+
+    <p>有几件事，之前在别人的 pitch 里听过很多次，自己做了才真正理解。</p>
+
+    <p><strong>信号检测和搜索是两件完全不同的事。</strong> 搜索假设你知道该问什么。但做 VC 最需要的恰恰是"我不知道我不知道的"——系统发现两篇间隔三周的文章指向相反的结论，而我没注意到。这是从 pull 到 push 的根本转变，不是给搜索框加个 AI 就能解决的。</p>
+
+    <p>这一点延伸出去，会发现<strong>用户的自然语言反应比结构化标签有用得多</strong>。做微信同步时我注意到——用户说"有道理"、"这个跟 XX 说的不一样"、"先放着"，这些话里包含了立场、关联、优先级。系统应该理解这些反应，而不是让用户去填表打标签。最好的元数据不是用户主动标注的，是从他们最自然的反应里提取的。</p>
+
+    <p>还有一件事跟产品无关，跟信仰有关：<strong>本地优先不是技术洁癖。</strong> 知识库可能是一个人最私密的数字资产。你的认知模型、你对每个方向的判断和立场、你在纠结什么——这些东西的所有权应该完全在你手里。核心搜索不应该依赖外部 API，不是因为不信任云服务，是因为这个级别的数据，拥有者应该有完全控制权。</p>
+
+    <h2>目前的状态</h2>
+
+    <p>Cortex 到今天大概八千行 Python 代码，十二个前端页面，四十多个 API 端点。实体抽取、thesis 追踪、信号检测、矛盾发现、混合搜索、分类引擎——核心功能都跑起来了。我自己每天在用。</p>
+
+    <p>但它本质上还是我个人思路和认知的一次具体化——把这几个月从搭管道到思考底层架构的过程，用代码表达了出来。</p>
+
+    <p>说实话，我朋友圈里做技术的大神太多了，这东西在他们眼里大概漏洞百出。架构有不够优雅的地方，产品细节不一定完善。但对我个人而言，一方面它确实能用了，我自己的信息处理效率实打实地提升了；另一方面，做这个产品的过程中产生的思考，可能比产品本身对我的意义更大。</p>
+
+    <h2>下场之后</h2>
+
+    <p>不是鼓励所有 VC 去写代码。</p>
+
+    <p>我开始做这件事不是因为技术能力够，而是也有一个私心，是希望能在用 AI 做自己的事情的过程中，对"什么是好的知识基础设施"形成了一手体感。这种体感比看一百个 demo 都值钱。</p>
+
+    <p>我想在模型能力快速增强的时候，亲自下场去感受模型能力的边界，对投资判断非常重要。模型能做什么、不能做什么、在什么场景下会出乎意料地好、在什么地方会莫名其妙地蠢——这些东西只有在真正用它做一个有复杂度的事情时才能感受到。看 demo 看不出来，读技术报告读不出来。</p>
+
+    <p>我也不是那种看了三年 AI、自己不用任何 AI 付费工具也能投好的 AI 投资人。虽然很佩服和羡慕这样的头部投资人。但我想我的路径是：必须自己下去摸，才能有自己的判断。</p>
+
+    <p>这种"下场"还带来了一个意外收获——对做产品的敬畏。自己写了几千行代码之后，对"做一款好产品"多了一种很具体的理解。以前看 demo 觉得"这里应该加个功能"说得很轻松。自己做了才知道，每一个看起来简单的功能背后都有十几个预想不到的边界情况。这种体感会改变你评估项目的方式——不是更宽容了，是更精确了。你能区分"这个团队还没做到"和"这个团队没想到"。后者可能才是真正的红旗。</p>
+
+    <h2>最后</h2>
+
+    <p>VC 这行每天处理的信息密度大概是最高的一批职业了。但整个行业的知识基础设施基本还停留在"共享文件夹加微信群加个人笔记"的阶段。我们投的 AI 公司在帮各行各业提升信息处理效率，那我们自己呢？</p>
+
+    <p>如果有一天 AI 能帮你记住所有读过的东西、发现所有你没注意到的矛盾、在你需要的时候把正确的信息推到你面前——你剩下该做的是什么？</p>
+
+    <p>大概就是判断吧。<br>而判断这件事，暂时还得自己来。</p>
+
+    <div class="article-cta">
+      <p>Cortex 只是我个人的一次探索，离一个成熟产品还很远。但这个过程让我越来越确信：围绕 AI Agent 的知识基础设施、认知工具、信息处理层——这个方向会长出非常有意思的东西。</p>
+      <p>如果你也在做让 Agent 更好用的事情——不管是基础设施、开发工具、还是垂直场景的应用——欢迎找我聊。作为投资人，我对这个方向有体感、有判断、有兴趣。作为用户，我大概也是你最挑剔的早期测试者之一。</p>
+      <a href="mailto:matteo.cui@lr-investments.com" class="cta-email">matteo.cui@lr-investments.com</a>
+    </div>
+
+  </div>
+</article>
+
+<nav class="article-nav">
+  <div class="article-nav-inner">
+    <a href="/blog/wechat-sync-weekend" class="article-nav-link article-nav-link--next">
+      <span class="article-nav-label">上一篇 &rarr;</span>
+      <span class="article-nav-title">我花了一个周末搭微信消息同步，然后微信自己把门打开了</span>
+    </a>
+  </div>
+</nav>
+
+<footer class="article-footer">
+  <div class="article-footer-inner">
+    <a href="/">&larr; matteocui.com</a>
+    <p>&copy; 2026 Matteo Cui</p>
+  </div>
+</footer>
+
+</body>
+</html>
