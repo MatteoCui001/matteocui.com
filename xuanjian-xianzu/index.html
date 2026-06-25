@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>玄鉴仙族 · 深度拆解</title>
+<meta name="description" content="《玄鉴仙族》深度拆解 —— 一部伪装成家族流的器物视角史诗。身份解码、修炼境界、李家七代谱系、势力地图、十三卷时间轴、核心矛盾与玄鉴金手指演化。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- subtle vignette / texture -->
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav__brand" href="#top" data-gotop>
+      <span class="nav__brand-name">玄鉴仙族</span>
+      <span class="nav__brand-sub">深度拆解</span>
+    </a>
+    <div class="nav__links" id="navLinks"><!-- rendered by script.js --></div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="top" class="hero">
+    <!-- the mirror / moon -->
+    <div class="hero__mirror" aria-hidden="true">
+      <div class="hero__mirror-glow"></div>
+      <div class="hero__mirror-ring hero__mirror-ring--gold"></div>
+      <div class="hero__mirror-ring hero__mirror-ring--jade"></div>
+      <div class="hero__mirror-ring hero__mirror-ring--spin"></div>
+    </div>
+
+    <div class="hero__content reveal">
+      <div class="hero__eyebrow">A Mirror-Spirit Saga</div>
+      <h1 class="hero__title">玄鉴仙族</h1>
+      <div class="rule"></div>
+      <p class="hero__lede">
+        一部伪装成家族流的<span class="c-jade">器物视角史诗</span>。现代人穿越为青铜镜器灵<span class="c-bright">「陆江仙」</span>，寄宿凡农李家，以玄珠符种扶持其历经<span class="c-gold">七代、两百余年</span>，从越国一隅的农户走向执掌江南、问鼎金丹证道的明阳仙族。
+      </p>
+      <div class="hero__stats" id="heroStats"><!-- rendered --></div>
+    </div>
+    <div class="hero__scroll">向 下 滚 动 · 太阴一线 ⇋ 明阳一线</div>
+  </section>
+
+  <!-- IDENTITY -->
+  <section id="identity" class="section">
+    <div class="section__head">
+      <span class="section__num">01</span>
+      <span class="section__kicker">CORE NARRATIVE TRICK</span>
+    </div>
+    <h2 class="section__title">身份解码 · 一个人的诸多面具</h2>
+    <p class="section__lede section__lede--narrow">
+      全书最大的叙事诡计：贯穿始终的视角人物「陆江仙」与世代相传的李家子孙，最终被揭示为<span class="c-bright">同一个存在</span>的镜内本体与世间投影。理解这条身份链，全书豁然开朗。
+    </p>
+
+    <div class="legend">
+      <div class="legend__item"><span class="dot dot--jade"></span><span>太阴一线 · 镜中下棋</span></div>
+      <div class="legend__item"><span class="dot dot--gold"></span><span>明阳一线 · 世间落子</span></div>
+      <div class="legend__item"><span class="dot dot--vio"></span><span>天外真相 · 两线合一</span></div>
+    </div>
+
+    <div class="accent-toggle" role="group" aria-label="叙事线强调">
+      <span class="accent-toggle__label">叙事线强调</span>
+      <button class="accent-toggle__btn is-active" data-accent-btn="both">双线</button>
+      <button class="accent-toggle__btn" data-accent-btn="taiyin">太阴一线</button>
+      <button class="accent-toggle__btn" data-accent-btn="mingyang">明阳一线</button>
+    </div>
+
+    <div class="masks" id="masks">
+      <div class="masks__spine" aria-hidden="true"></div>
+      <!-- mask rows rendered, then final truth card -->
+      <div class="mask mask--truth" id="truthCard">
+        <div class="mask__node"><span class="mask__tag">真</span></div>
+        <div class="mask__truth-body">
+          <div class="mask__truth-inner" id="truthInner">
+            <div class="mask__truth-head">
+              <span class="mask__truth-name">青诣元心仪 · 终极真相</span>
+              <span class="mask__truth-chap">第13卷 1455–1457章</span>
+            </div>
+            <p class="mask__truth-text">仙鉴本体，是正始道统「八卦镜」分裂出的<span class="c-soft">七枚鉴身碎片</span>；另有七枚镜面碎片与最大的独立碎片「玄谙」。元府不过是玄谙造的千年假局——陆江仙、盈昃、李乾元，皆是这面镜子寻回自身的旅程。</p>
+          </div>
+          <button class="mask__guard" id="truthGuard" type="button">⊙ 点击揭示终极真相</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- two-line callouts -->
+    <div class="callouts">
+      <div class="callout callout--jade">
+        <div class="callout__title c-jade">李启 · 统摄性主角代称</div>
+        <p class="callout__text">书中并无独立活跃的「李启」；他是这条身份链的总称——镜内幕后的陆江仙，与各卷世间代理人的合体。</p>
+      </div>
+      <div class="callout callout--gold">
+        <div class="callout__title c-gold">李周巍 · 世间明阳之躯</div>
+        <p class="callout__text">明煌 / 白麒麟 / 魏王。陆江仙在世间的明阳王身，证道求金的「明牌」——成则被三方绞杀，是全书终极困局。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REALM LADDER -->
+  <section id="realm" class="section section--band">
+    <div class="section__inner">
+      <div class="section__head">
+        <span class="section__num">02</span>
+        <span class="section__kicker">THE LADDER OF CULTIVATION</span>
+      </div>
+      <h2 class="section__title">修炼境界阶梯总表</h2>
+      <p class="section__lede section__lede--narrow section__lede--gap">从凡俗到天道，体系逐卷加深。早期以「胎息→金丹」为骨架；中后期引入果位 / 道统 / 三阴三阳的天道层级。仙魔之争后境界古称被刻意改晦涩，暗示<span class="c-bright">正史被改写</span>。</p>
+
+      <div class="realms" id="realms"><!-- rendered --></div>
+      <p class="footnote footnote--gold">底层设定（第3卷284章）：<span class="c-gold">「天道出了问题，三灾九劫俱散」</span>——仙魔大战后约束机制崩溃，是魔灾、宗门收割、世家速朽一切乱象的总根源。</p>
+    </div>
+  </section>
+
+  <!-- LINEAGE -->
+  <section id="lineage" class="section">
+    <div class="section__head">
+      <span class="section__num">03</span>
+      <span class="section__kicker">SEVEN GENERATIONS OF THE LI</span>
+    </div>
+    <h2 class="section__title">李家世代传承谱系</h2>
+    <p class="section__lede">辈分字取自《接引法》法诀，修炼境界与家族传承绑定——个人会死，家族延续，主角的「实力」体现为他能调动的家族量级。</p>
+    <div class="creed">玄景渊清，曦月承明；周行绛阙，遂语青元；玉京映象，唯见灵初。</div>
+
+    <div class="lineage" id="lineage-list">
+      <div class="lineage__spine" aria-hidden="true"></div>
+      <!-- rendered -->
+    </div>
+  </section>
+
+  <!-- FACTIONS -->
+  <section id="factions" class="section section--band">
+    <div class="section__inner">
+      <div class="section__head">
+        <span class="section__num">04</span>
+        <span class="section__kicker">THE MAP OF POWERS</span>
+      </div>
+      <h2 class="section__title">势力地图与阵营关系</h2>
+      <p class="section__lede">格局随境界升级层层放大：从望月湖一隅的家族兼并，到南北大战的国族层面，再到王朝与真君道统的天下棋局。底层规则是<span class="c-gold">「猪牛论」</span>——三宗七门养世家如猪牛，世家养凡人如猪牛。</p>
+      <div class="rel-legend" id="relLegend"><!-- rendered --></div>
+      <div class="factions" id="factions-list"><!-- rendered --></div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline" class="section">
+    <div class="section__head">
+      <span class="section__num">05</span>
+      <span class="section__kicker">THIRTEEN VOLUMES</span>
+    </div>
+    <h2 class="section__title">全书十三卷时间轴</h2>
+    <p class="section__lede section__lede--gap">每一卷一句话定位「家族量级跃迁」与「核心人物境界」。死亡是这本书真正的节拍器——重大死亡几乎都卡在卷与卷的接缝处，承担「关一扇门、开一扇门」的功能。</p>
+
+    <div class="timeline">
+      <div class="timeline__spine" aria-hidden="true"></div>
+      <div class="timeline__list" id="timeline-list"><!-- rendered --></div>
+    </div>
+  </section>
+
+  <!-- CONFLICTS -->
+  <section id="conflict" class="section section--band">
+    <div class="section__inner">
+      <div class="section__head">
+        <span class="section__num">06</span>
+        <span class="section__kicker">NESTED CONFLICTS</span>
+      </div>
+      <h2 class="section__title">贯穿全书的核心矛盾线</h2>
+      <p class="section__lede section__lede--gap">全书并非单一冲突，而是数条矛盾线层层嵌套、逐级升维——从最底层的家族存亡，一路攀升到仙道诸真君的最高博弈。</p>
+      <div class="conflicts" id="conflicts-list"><!-- rendered --></div>
+    </div>
+  </section>
+
+  <!-- MIRROR -->
+  <section id="mirror" class="section">
+    <div class="section__head">
+      <span class="section__num">07</span>
+      <span class="section__kicker">THE GOLDEN FINGER</span>
+    </div>
+    <h2 class="section__title">玄鉴 · 金手指演化</h2>
+    <p class="section__lede section__lede--gap">法鉴 / 仙鉴既是器物，又是主角寄居体，更是跨越千年的天道级谜题。它随碎片回收而升级——金手指强大的同时，每一步都被立刻上锁。</p>
+
+    <div class="abilities" id="abilities-list"><!-- rendered --></div>
+
+    <div class="mirror__heading">升级演化主线</div>
+    <div class="stages" id="stages-list"><!-- rendered --></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__eyebrow">THE RECIPE</div>
+      <p class="footer__recipe">
+        用一个不开口的器灵当主角，把「个人升级」换成「代际接力」，<br>用全知—无知的信息差当爽点引擎，用人物死亡当结构节拍器，<br>用器灵的千年时间尺度撑起跨全书的伏笔网络。
+      </p>
+      <div class="rule rule--center"></div>
+      <p class="footer__meta">深度拆解覆盖第 1–1497 章 · 全书十三卷 digest 综合<br>世界观 · 人物剧情 · 创作手法</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
